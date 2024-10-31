@@ -1,0 +1,38 @@
+---
+title: 'App Store Deployment'
+description: 'Deploy your app to the iOS App Store'
+---
+
+## Prerequisites
+
+- Apple Developer Account ($99/year)
+- Xcode installed on your Mac
+- App Store Connect setup completed
+
+## Deployment Steps
+
+### 1. Configure App Store Connect
+
+1. Create a new app in App Store Connect
+2. Set up your app's information:
+   - Bundle ID
+   - App name
+   - Privacy policy URL
+   - App Store categories
+
+### 2. Prepare Your Build
+
+```bash
+# Build your app for release
+cd ios
+bundle exec fastlane build_release
+
+# Upload to TestFlight
+bundle exec fastlane beta
+```
+
+### 3. Submit for Review
+
+1. Complete App Store submission checklist
+2. Add app screenshots and metadata
+3. Submit for review through App Store Connect 

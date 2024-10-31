@@ -1,6 +1,6 @@
 {
   "$schema": "https://mintlify.com/schema.json",
-  "name": "Starter Kit",
+  "name": "React Native Boilerplate",
   "logo": {
     "dark": "/logo/dark.svg",
     "light": "/logo/light.svg"
@@ -51,28 +51,35 @@
   "navigation": [
     {
       "group": "Get Started",
-      "pages": [
-        "introduction",
-        "quickstart",
-        "development"
-      ]
+      "pages": ["introduction", "gettingstarted", "development"]
     },
     {
-      "group": "Essentials",
-      "pages": [
-        "essentials/markdown",
-        "essentials/code",
-        "essentials/images",
-        "essentials/settings",
-        "essentials/navigation",
-        "essentials/reusable-snippets"
-      ]
+      "group": "Integrations",
+      "pages": ["supabase", "stripe", "revenueCat"]
+    },
+    {
+      "group": "Backend API",
+      "pages": ["setup", "endpoints"]
+    },
+    {
+      "group": "Fastlane",
+      "pages": ["setup"]
+    },
+    {
+      "group": "Deployment",
+      "pages": ["app-Store", "google-Play"]
     },
     {
       "group": "API Documentation",
-      "pages": [
-        "api-reference/introduction"
-      ]
+      "pages": ["api-reference/introduction"]
+    },
+    {
+      "group": "Help & Support",
+      "pages": ["troubleshooting"]
+    },
+    {
+      "group": "Contribute",
+      "pages": ["feature-requests"]
     },
     {
       "group": "Endpoint Examples",

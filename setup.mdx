@@ -1,0 +1,29 @@
+---
+title: 'Backend API Setup'
+description: 'Configure your backend API connection'
+---
+
+## API Configuration
+
+### Environment Setup
+
+Create a `.env` file with your API credentials:
+
+```bash
+API_BASE_URL=https://api.your-service.com
+API_KEY=your_api_key
+```
+
+### API Client Setup
+
+```typescript
+import axios from 'axios';
+
+const apiClient = axios.create({
+  baseURL: process.env.API_BASE_URL,
+  headers: {
+    'Authorization': `Bearer ${process.env.API_KEY}`,
+    'Content-Type': 'application/json',
+  }
+});
+``` 

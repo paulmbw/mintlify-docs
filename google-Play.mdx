@@ -1,0 +1,35 @@
+---
+title: 'Google Play Deployment'
+description: 'Deploy your app to the Google Play Store'
+---
+
+## Prerequisites
+
+- Google Play Developer account ($25 one-time fee)
+- Keystore file for app signing
+- Privacy policy URL
+
+## Deployment Steps
+
+### 1. Google Play Console Setup
+
+1. Create new application
+2. Configure store listing
+3. Set up content rating
+
+### 2. Build and Deploy
+
+```bash
+# Generate release build
+cd android
+bundle exec fastlane build_release
+
+# Upload to Play Store
+bundle exec fastlane deploy_internal
+```
+
+### 3. Release Management
+
+1. Internal testing
+2. Open beta testing
+3. Production release 

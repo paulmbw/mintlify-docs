@@ -1,0 +1,39 @@
+---
+title: 'Troubleshooting'
+description: 'Common issues and solutions'
+---
+
+## Common Issues
+
+### Build Errors
+
+#### Metro Bundler Issues
+```bash
+# Clear metro bundler cache
+yarn start --reset-cache
+```
+
+#### iOS Build Failures
+```bash
+cd ios
+pod install --repo-update
+```
+
+### Runtime Issues
+
+#### App Crashes on Launch
+- Check native dependencies
+- Verify environment variables
+- Review crash logs
+
+### Deployment Problems
+
+#### iOS Code Signing
+- Verify provisioning profiles
+- Check certificates in Keychain
+- Review Xcode signing settings
+
+#### Android Keystore Issues
+- Verify keystore location
+- Check gradle signing config
+- Confirm keystore passwords 
