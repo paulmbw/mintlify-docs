@@ -1,0 +1,35 @@
+---
+title: 'Sign in with Apple'
+description: 'Implement Apple Sign-in with Supabase'
+---
+
+## Prerequisites
+
+1. Apple Developer Account
+2. App ID configured in Apple Developer Console
+3. Sign in with Apple capability enabled
+
+## Configuration
+
+### 1. Apple Developer Setup
+
+1. Go to [Apple Developer Console](https://developer.apple.com/account)
+2. Navigate to Certificates, Identifiers & Profiles
+3. Configure Sign in with Apple for your App ID:
+   - Select your App ID
+   - Enable "Sign in with Apple" capability
+   - Configure the service with your domain
+
+### 2. Supabase Configuration
+
+1. In Supabase Dashboard, go to Authentication > Providers
+2. Enable Apple provider
+3. Add your Apple credentials:
+   - Service ID
+   - Team ID
+   - Key ID
+   - Private Key
+
+### 3. Implementation
+
+Add Apple Sign-in to your app: 

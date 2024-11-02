@@ -1,0 +1,183 @@
+---
+title: 'SQL Queries'
+description: 'Write and optimize SQL queries with Supabase'
+---
+
+## Basic Queries
+
+### Select Data
+
+```sql
+-- Basic select
+select * from profiles;
+
+-- Select specific columns
+select id, full_name, avatar_url 
+from profiles 
+where id = 'user_id';
+
+-- Join tables
+select p.*, a.* 
+from profiles p
+join accounts a on p.id = a.user_id;
+```
+
+### Insert Data
+
+```sql
+-- Single insert
+insert into profiles (id, full_name, avatar_url)
+values ('user_id', 'John Doe', 'https://example.com/avatar.jpg');
+
+-- Multiple inserts
+insert into profiles (id, full_name, avatar_url)
+values 
+  ('user1', 'John Doe', 'avatar1.jpg'),
+  ('user2', 'Jane Smith', 'avatar2.jpg');
+```
+
+## Advanced Queries
+
+### Full Text Search
+
+```sql
+-- Create search index
+create index profiles_full_text_idx on profiles 
+using gin(to_tsvector('english', full_name));
+
+-- Perform search
+select * 
+from profiles 
+where to_tsvector('english', full_name) @@ to_tsquery('john');
+```
+
+### Real-time Subscriptions
+
+```sql
+-- Enable real-time for table
+alter table profiles 
+enable row level security;
+
+alter publication supabase_realtime 
+add table profiles;
+
+-- RLS policies for real-time
+create policy "Enable real-time for users"
+on profiles
+for select
+using (auth.uid() = id);
+```
+
+## Stored Procedures
+
+```sql
+-- Create function
+create or replace function get_user_profile(user_id uuid)
+returns json
+language plpgsql
+security definer
+as $$
+begin
+  return (
+    select json_build_object(
+      'id', p.id,
+      'full_name', p.full_name,
+      'avatar_url', p.avatar_url,
+      'account_status', a.status
+    )
+    from profiles p
+    left join accounts a on p.id = a.user_id
+    where p.id = user_id
+  );
+end;
+$$;
+
+-- Call function
+select get_user_profile('user_id');
+```
+
+## Row Level Security (RLS)
+
+```sql
+-- Enable RLS
+alter table profiles enable row level security;
+
+-- Read policy
+create policy "Public profiles are viewable by everyone"
+on profiles for select
+using ( true );
+
+-- Insert policy
+create policy "Users can insert their own profile"
+on profiles for insert
+with check ( auth.uid() = id );
+
+-- Update policy
+create policy "Users can update own profile"
+on profiles for update
+using ( auth.uid() = id );
+```
+
+## Performance Optimization
+
+### Indexes
+
+```sql
+-- B-tree index
+create index profiles_full_name_idx 
+on profiles (full_name);
+
+-- Partial index
+create index active_profiles_idx 
+on profiles (created_at) 
+where status = 'active';
+
+-- Composite index
+create index profiles_search_idx 
+on profiles (full_name, email);
+```
+
+### Query Optimization
+
+```sql
+-- Use explain analyze
+explain analyze
+select * from profiles
+where full_name ilike '%john%';
+
+-- Optimize with materialized view
+create materialized view user_stats as
+select 
+  user_id,
+  count(*) as total_posts,
+  max(created_at) as last_post_date
+from posts
+group by user_id;
+
+-- Refresh materialized view
+refresh materialized view user_stats;
+```
+
+## Migrations
+
+```sql
+-- Create migration
+create or replace function migrate_user_data()
+returns void
+language plpgsql
+as $$
+begin
+  -- Add new column
+  alter table profiles
+  add column if not exists bio text;
+  
+  -- Update existing data
+  update profiles
+  set bio = 'No bio yet'
+  where bio is null;
+end;
+$$;
+
+-- Run migration
+select migrate_user_data();
+``` 

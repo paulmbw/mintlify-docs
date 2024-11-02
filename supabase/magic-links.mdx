@@ -1,0 +1,111 @@
+---
+title: 'Magic Link Authentication'
+description: 'Implement passwordless authentication with Magic Links'
+---
+
+## Overview
+
+Magic links provide a passwordless authentication method where users receive a sign-in link via email.
+
+## Implementation
+
+### 1. Configure Email Provider
+
+1. In Supabase Dashboard, go to Authentication > Email Templates
+2. Customize the Magic Link email template
+3. Configure SMTP settings (optional for custom email provider)
+
+### 2. Send Magic Link
+
+```typescript
+import { supabase } from '@/lib/supabase';
+
+const sendMagicLink = async (email: string) => {
+  try {
+    const { data, error } = await supabase.auth.signInWithOtp({
+      email,
+      options: {
+        emailRedirectTo: 'yourapp://login-callback',
+      },
+    });
+
+    if (error) throw error;
+    
+    return { success: true, message: 'Check your email for the login link!' };
+  } catch (error) {
+    console.error('Error sending magic link:', error);
+    return { success: false, message: error.message };
+  }
+};
+```
+
+### 3. Handle Deep Links
+
+```typescript
+import { linking } from '@/navigation/linking';
+import { URLListener } from '@/utils/URLListener';
+
+// Set up deep link handling
+const setupDeepLinks = () => {
+  URLListener.addEventListener('url', ({ url }) => {
+    if (url) {
+      // Extract token from URL
+      const { access_token, refresh_token } = parseAuthTokens(url);
+      
+      if (access_token && refresh_token) {
+        // Handle the authentication
+        handleAuthTokens(access_token, refresh_token);
+      }
+    }
+  });
+};
+```
+
+### 4. Create Magic Link Form
+
+```typescript
+const MagicLinkForm = () => {
+  const [email, setEmail] = useState('');
+  const [loading, setLoading] = useState(false);
+  const [message, setMessage] = useState('');
+
+  const handleSubmit = async () => {
+    setLoading(true);
+    const { success, message } = await sendMagicLink(email);
+    setMessage(message);
+    setLoading(false);
+  };
+
+  return (
+    <View>
+      <TextInput
+        value={email}
+        onChangeText={setEmail}
+        placeholder="Enter your email"
+        keyboardType="email-address"
+        autoCapitalize="none"
+      />
+      <Button
+        title={loading ? 'Sending...' : 'Send Magic Link'}
+        onPress={handleSubmit}
+        disabled={loading}
+      />
+      {message ? <Text>{message}</Text> : null}
+    </View>
+  );
+};
+```
+
+## Security Considerations
+
+1. Set appropriate token expiration times
+2. Implement rate limiting
+3. Validate email domains
+4. Monitor for abuse
+
+## Testing
+
+1. Test with various email providers
+2. Verify deep link handling
+3. Check error scenarios
+4. Test on different devices/platforms 

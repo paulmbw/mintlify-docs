@@ -1,14 +1,14 @@
 ---
 title: "Getting Started"
-description: "Learn how to preview changes locally"
+description: "Fork or clone the repository to get started"
 ---
 
 <Info>
-  **Prerequisite**: Please install Node.js (version 19 or higher) before
-  proceeding.
+  **Prerequisite**: Please install Node.js (version 18 or higher) before
+  proceeding. This project uses Node.js v18.18.0.
 </Info>
 
-There are two ways to get started with LaunchToday CLI:
+There are two ways to get started with Launchtoday:
 
 ## Option 1: Fork the Repository (Recommended)
 
@@ -31,20 +31,80 @@ git clone git@github.com:launchtodayhq/launchtoday-rncli.git [YOUR_APP_NAME]
 
 ## Setting Up Your Project
 
-Once you have cloned the repository using either method, run the following commands:
+Once you have cloned the repository using either method, navigate to the project directory and run the following commands:
 
 ```bash
-cd [YOUR_APP_NAME]
-yarn
+nvm use
 cp .env.example .env
+yarn
 ```
+
+## Platform-Specific Setup
+
+### iOS Setup
+
+1. Install CocoaPods dependencies:
+
+```bash
+npx pod-install
+```
+
+2. Open the iOS project in Xcode:
+
+```bash
+open ios/LaunchToday.xcworkspace
+```
+
+3. Update your Bundle Identifier:
+
+   - In Xcode, select the "Launchtoday" project in the navigator on the left
+   - Select the "Launchtoday" target
+   - Under the "Signing & Capabilities" tab, change the Bundle Identifier from "com.launchtoday" to your chosen identifier (e.g., "com.yourcompany.appname")
+
+4. Configure your Development Team:
+
+   - In the same "Signing & Capabilities" tab
+   - Select your Development Team from the dropdown
+   - If you don't have one, sign in with your Apple ID in Xcode preferences
+
+   ![Xcode Setup](./images/xcode-setup.jpg)
+
+### Android Setup
+
+Android setup is typically ready to go after the initial project setup. Just ensure you have:
+
+- Android Studio installed
+- An Android emulator set up or a physical device connected
 
 ## Running Your App
 
 You can start the app using **npx expo run** and choose your platform, or use these commands:
 
 ```bash
-yarn run ios
+yarn ios:simulator
 # or
 yarn run android
 ```
+
+<Info>
+  `ios:simulator` is a shortcut for running the app on a specific iOS simulator,
+  specifically targeting the iPhone 15 Pro Max. If you're having trouble
+  targeting a specific iOS simulator, check out our [FAQ guide on targeting iOS
+  simulators](/faqs#how-do-i-target-a-specific-ios-simulator).
+</Info>
+
+As a result, you should see something like this:
+
+![Running the app](./images/launchtoday.jpg)
+
+
+## Troubleshooting
+
+If you encounter any issues while running the app:
+
+1. Check our [FAQ page](/faqs) for common problems and solutions
+2. Join our [Discord community](https://discord.gg/launchtoday) for real-time help
+3. Create a [GitHub issue](https://github.com/launchtodayhq/launchtoday-rncli/issues) if you think you've found a bug
+
+Our community is here to help you get up and running quickly!
+

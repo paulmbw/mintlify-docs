@@ -1,0 +1,108 @@
+---
+title: 'Sign in with Google'
+description: 'Implement Google Sign-in with Supabase'
+---
+
+## Prerequisites
+
+1. Google Cloud Console project
+2. OAuth 2.0 Client credentials
+3. Configured OAuth consent screen
+
+## Configuration
+
+### 1. Google Cloud Setup
+
+1. Go to [Google Cloud Console](https://console.cloud.google.com)
+2. Create or select your project
+3. Enable the Google Identity Platform:
+   - Navigate to APIs & Services > OAuth consent screen
+   - Configure consent screen
+   - Add necessary scopes (email, profile)
+4. Create OAuth 2.0 credentials:
+   - Go to APIs & Services > Credentials
+   - Create OAuth client ID
+   - Add authorized redirect URIs (from Supabase)
+
+### 2. Supabase Configuration
+
+1. In Supabase Dashboard, go to Authentication > Providers
+2. Enable Google provider
+3. Add your Google credentials:
+   - Client ID
+   - Client Secret
+
+### 3. Implementation
+
+Add Google Sign-in to your app:
+
+```typescript
+import { supabase } from '@/lib/supabase';
+import { GoogleSignin } from '@react-native-google-signin/google-signin';
+
+// Initialize Google Sign-in
+GoogleSignin.configure({
+  webClientId: 'YOUR_WEB_CLIENT_ID',
+  iosClientId: 'YOUR_IOS_CLIENT_ID',
+});
+
+const signInWithGoogle = async () => {
+  try {
+    await GoogleSignin.hasPlayServices();
+    const { idToken } = await GoogleSignin.signIn();
+    
+    const { data, error } = await supabase.auth.signInWithIdToken({
+      provider: 'google',
+      token: idToken,
+    });
+
+    if (error) throw error;
+    
+    // Handle successful sign in
+    console.log('Signed in:', data);
+    
+  } catch (error) {
+    console.error('Google sign in error:', error);
+  }
+};
+```
+
+### 4. Add Sign-in Button
+
+```typescript
+import { GoogleSigninButton } from '@react-native-google-signin/google-signin';
+
+const GoogleSignInButton = () => {
+  return (
+    <GoogleSigninButton
+      size={GoogleSigninButton.Size.Wide}
+      color={GoogleSigninButton.Color.Dark}
+      onPress={signInWithGoogle}
+    />
+  );
+};
+```
+
+## Error Handling
+
+```typescript
+const handleGoogleSignIn = async () => {
+  try {
+    const { data, error } = await signInWithGoogle();
+    if (error) {
+      switch (error.code) {
+        case 'CANCELED':
+          console.log('User canceled the sign-in flow');
+          break;
+        case 'SIGN_IN_REQUIRED':
+          console.log('User needs to sign in to proceed');
+          break;
+        default:
+          console.error('Unexpected error:', error);
+      }
+    }
+  } catch (error) {
+    console.error('Google sign in failed:', error);
+  }
+};
+``` 

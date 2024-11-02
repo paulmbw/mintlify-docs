@@ -58,6 +58,17 @@
       "pages": ["supabase", "stripe", "revenueCat"]
     },
     {
+      "group": "Supabase",
+      "pages": [
+        "supabase/setup",
+        "supabase/apple-signin",
+        "supabase/google-signin",
+        "supabase/magic-links",
+        "supabase/edge-functions",
+        "supabase/sql-queries"
+      ]
+    },
+    {
       "group": "Backend API",
       "pages": ["setup", "endpoints"]
     },
@@ -75,7 +86,7 @@
     },
     {
       "group": "Help & Support",
-      "pages": ["troubleshooting"]
+      "pages": ["troubleshooting", "faqs"]
     },
     {
       "group": "Contribute",
