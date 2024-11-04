@@ -25,44 +25,46 @@
     "name": "Dashboard",
     "url": "https://dashboard.mintlify.com"
   },
+  "primaryTab": {
+    "name": "React Native CLI"
+  },
   "tabs": [
     {
-      "name": "API Reference",
-      "url": "api-reference"
+      "name": "Expo",
+      "url": "expo"
     }
   ],
   "anchors": [
     {
       "name": "Get Launchtoday",
-      "icon": "code",
+      "icon": "rocket",
       "url": "https://launchtoday.dev/"
     },
     {
-      "name": "Community",
+      "name": "Join the Community",
       "icon": "discord",
       "url": "https://discord.gg/sFcdkzY2HZ"
-    },
-    {
-      "name": "Blog",
-      "icon": "newspaper",
-      "url": "https://mintlify.com/blog"
     }
   ],
   "navigation": [
     {
-      "group": "Get Started",
-      "pages": ["introduction", "gettingstarted"]
+      "group": "Getting Started",
+      "pages": [
+        "react-native-cli/introduction",
+        "react-native-cli/dependencies",
+        "react-native-cli/gettingstarted"
+      ]
     },
     {
       "group": "Supabase",
       "pages": [
-        "supabase/setup",
-        "supabase/auth-context",
-        "supabase/apple-signin",
-        "supabase/google-signin",
-        "supabase/magic-links",
-        "supabase/sql-queries",
-        "supabase/edge-functions"
+        "react-native-cli/supabase/setup",
+        "react-native-cli/supabase/auth-context",
+        "react-native-cli/supabase/apple-signin",
+        "react-native-cli/supabase/google-signin",
+        "react-native-cli/supabase/magic-links",
+        "react-native-cli/supabase/sql-queries",
+        "react-native-cli/supabase/edge-functions"
       ]
     },
     {
@@ -95,6 +97,22 @@
         "api-reference/endpoint/get",
         "api-reference/endpoint/create",
         "api-reference/endpoint/delete"
+      ]
+    },
+    {
+      "group": "Get Started",
+      "pages": ["expo/introduction", "expo/gettingstarted"]
+    },
+    {
+      "group": "Supabase",
+      "pages": [
+        "expo/supabase/setup",
+        "expo/supabase/auth-context",
+        "expo/supabase/apple-signin",
+        "expo/supabase/google-signin",
+        "expo/supabase/magic-links",
+        "expo/supabase/sql-queries",
+        "expo/supabase/edge-functions"
       ]
     }
   ],
