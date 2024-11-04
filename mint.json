@@ -7,12 +7,12 @@
   },
   "favicon": "/favicon.svg",
   "colors": {
-    "primary": "#0D9373",
-    "light": "#07C983",
-    "dark": "#0D9373",
+    "primary": "#000000",
+    "light": "#ffffff",
+    "dark": "#000000",
     "anchors": {
-      "from": "#0D9373",
-      "to": "#07C983"
+      "from": "#000000",
+      "to": "#000000"
     }
   },
   "topbarLinks": [
@@ -33,14 +33,14 @@
   ],
   "anchors": [
     {
-      "name": "Documentation",
-      "icon": "book-open-cover",
-      "url": "https://mintlify.com/docs"
+      "name": "Get Launchtoday",
+      "icon": "code",
+      "url": "https://launchtoday.dev/"
     },
     {
       "name": "Community",
-      "icon": "slack",
-      "url": "https://mintlify.com/community"
+      "icon": "discord",
+      "url": "https://discord.gg/sFcdkzY2HZ"
     },
     {
       "name": "Blog",
@@ -51,21 +51,18 @@
   "navigation": [
     {
       "group": "Get Started",
-      "pages": ["introduction", "gettingstarted", "development"]
-    },
-    {
-      "group": "Integrations",
-      "pages": ["supabase", "stripe", "revenueCat"]
+      "pages": ["introduction", "gettingstarted"]
     },
     {
       "group": "Supabase",
       "pages": [
         "supabase/setup",
+        "supabase/auth-context",
         "supabase/apple-signin",
         "supabase/google-signin",
         "supabase/magic-links",
-        "supabase/edge-functions",
-        "supabase/sql-queries"
+        "supabase/sql-queries",
+        "supabase/edge-functions"
       ]
     },
     {

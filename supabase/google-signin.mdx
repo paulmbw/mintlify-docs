@@ -1,108 +1,132 @@
 ---
-title: 'Sign in with Google'
-description: 'Implement Google Sign-in with Supabase'
+title: "Sign in with Google"
+description: "Implement Google Sign-in with Supabase"
 ---
 
-## Prerequisites
+<img
+  src="/images/supbase-google.png"
+  alt="Google Sign-in Configuration"
+  style={{
+    borderRadius: "10px",
+    maxHeight: "450px",
+  }}
+/>
 
-1. Google Cloud Console project
-2. OAuth 2.0 Client credentials
-3. Configured OAuth consent screen
+Google Sign-in integration provides your users with a secure and familiar authentication experience. Launchtoday seamlessly incorporates Google's authentication services through Supabase, offering a robust and reliable authentication system that's easy to implement and maintain.
 
-## Configuration
+## Setting Up Google Cloud Platform
 
-### 1. Google Cloud Setup
+The integration process begins with configuring your Google Cloud Platform (GCP) project. This setup involves creating the necessary OAuth credentials and configuring the consent screen that users will see when signing in to your application.
 
-1. Go to [Google Cloud Console](https://console.cloud.google.com)
-2. Create or select your project
-3. Enable the Google Identity Platform:
-   - Navigate to APIs & Services > OAuth consent screen
-   - Configure consent screen
-   - Add necessary scopes (email, profile)
-4. Create OAuth 2.0 credentials:
-   - Go to APIs & Services > Credentials
-   - Create OAuth client ID
-   - Add authorized redirect URIs (from Supabase)
+### Configuring the OAuth Consent Screen
 
-### 2. Supabase Configuration
+Start by visiting the [Google Cloud Console](https://console.cloud.google.com) and either create a new project or select an existing one. Navigate to the [OAuth consent screen configuration](https://console.cloud.google.com/apis/credentials/consent) where you'll need to provide essential information about your application:
 
-1. In Supabase Dashboard, go to Authentication > Providers
-2. Enable Google provider
-3. Add your Google credentials:
-   - Client ID
-   - Client Secret
+- Application name
+- User support email
+- Developer contact information
+- Authorized domains (add your Supabase project URL without the protocol, e.g., `<project-id>.supabase.co`)
 
-### 3. Implementation
+### Creating OAuth Credentials
 
-Add Google Sign-in to your app:
+After configuring the consent screen, you'll need to set up OAuth 2.0 credentials for both web and mobile platforms. Please follow the steps carefully.
 
-```typescript
-import { supabase } from '@/lib/supabase';
-import { GoogleSignin } from '@react-native-google-signin/google-signin';
+#### Web Application Credentials
 
-// Initialize Google Sign-in
-GoogleSignin.configure({
-  webClientId: 'YOUR_WEB_CLIENT_ID',
-  iosClientId: 'YOUR_IOS_CLIENT_ID',
-});
+1. In the Google Cloud Console, navigate to APIs & Services > Credentials
+2. Click "Create Credentials" and select "OAuth client ID"
+3. Choose "Web application" as the application type
+4. Configure the authorized redirect URIs using your Supabase callback URL
 
-const signInWithGoogle = async () => {
-  try {
-    await GoogleSignin.hasPlayServices();
-    const { idToken } = await GoogleSignin.signIn();
-    
-    const { data, error } = await supabase.auth.signInWithIdToken({
-      provider: 'google',
-      token: idToken,
-    });
+To locate your Supabase callback URL, navigate to your Supabase dashboard (Authentication > Providers > Google) and copy the value:
 
-    if (error) throw error;
-    
-    // Handle successful sign in
-    console.log('Signed in:', data);
-    
-  } catch (error) {
-    console.error('Google sign in error:', error);
-  }
-};
+<img
+  src="/images/authorised-redirect-uri.jpg"
+  alt="Supabase Callback URL Configuration"
+  style={{
+    borderRadius: "10px",
+    maxHeight: "450px",
+  }}
+/>
+
+Then add it to the Authorized redirect URIs in your Google Cloud Console:
+
+<img
+  src="/images/google-supabase-2.jpg"
+  alt="Google OAuth Configuration"
+  style={{
+    borderRadius: "10px",
+    maxHeight: "450px",
+  }}
+/>
+
+Upon completion, you'll receive your Client ID and Client Secret:
+
+<img
+  src="/images/oauthclientcreated.jpg"
+  alt="OAuth Credentials"
+  style={{
+    borderRadius: "10px",
+    maxHeight: "450px",
+  }}
+/>
+
+With your Google OAuth credentials in hand (Client ID and Client Secret), configure your Supabase project to enable Google authentication:
+
+1. Navigate to your Supabase dashboard's Authentication > Providers > Google section
+2. Enter the Client ID and Client Secret obtained from Google Cloud Console
+3. Enable the Google provider
+
+<img
+  src="/images/client-id-secret.jpg"
+  alt="Supabase Google Provider Configuration"
+  style={{
+    borderRadius: "10px",
+    maxHeight: "450px",
+  }}
+/>
+
+#### Android Application Credentials
+
+For Android applications, additional credentials are required to ensure secure authentication and prevent unauthorized access to your Google Sign-in implementation.
+
+1. Return to Google Cloud Console > APIs & Services > Credentials
+2. Create another OAuth client ID, selecting "Android" as the application type
+3. Enter your application's package name (e.g., `com.launchtoday.app`)
+4. Add your SHA-1 certificate fingerprint (see below for details on how to create this)
+
+### Generating SHA-1 Certificate Fingerprint
+
+The SHA-1 fingerprint acts as a unique identifier for your Android application, helping Google verify that requests are coming from your legitimate app. To obtain your SHA-1 fingerprint, execute the following command from your project's root directory:
+
+```bash
+keytool -keystore android/app/debug.keystore -list -v
 ```
 
-### 4. Add Sign-in Button
+When prompted, enter the keystore password (default is `android` as specified in your app's `build.gradle` file). The command will output your SHA-1 fingerprint:
 
-```typescript
-import { GoogleSigninButton } from '@react-native-google-signin/google-signin';
+<img
+  src="/images/sha-android.jpg"
+  alt="SHA-1 Fingerprint Generation"
+  style={{
+    borderRadius: "10px",
+    maxHeight: "450px",
+  }}
+/>
 
-const GoogleSignInButton = () => {
-  return (
-    <GoogleSigninButton
-      size={GoogleSigninButton.Size.Wide}
-      color={GoogleSigninButton.Color.Dark}
-      onPress={signInWithGoogle}
-    />
-  );
-};
-```
+Add this fingerprint to your Android OAuth client configuration in Google Cloud Console:
 
-## Error Handling
+<img
+  src="/images/sha-android-2.jpg"
+  alt="Android OAuth Configuration"
+  style={{
+    borderRadius: "10px",
+    maxHeight: "450px",
+  }}
+/>
 
-```typescript
-const handleGoogleSignIn = async () => {
-  try {
-    const { data, error } = await signInWithGoogle();
-    if (error) {
-      switch (error.code) {
-        case 'CANCELED':
-          console.log('User canceled the sign-in flow');
-          break;
-        case 'SIGN_IN_REQUIRED':
-          console.log('User needs to sign in to proceed');
-          break;
-        default:
-          console.error('Unexpected error:', error);
-      }
-    }
-  } catch (error) {
-    console.error('Google sign in failed:', error);
-  }
-};
-``` 
+## Testing the Integration
+
+Once configured, you can test the Google Sign-in flow by running your application with either `yarn android` or `yarn ios`. The authentication process will present users with Google's standard sign-in interface, where they can select their Google account and grant permissions to your application.
+
+Remember to test both the success and failure scenarios to ensure your application handles all cases gracefully. The integration automatically manages token refresh and session persistence, providing a seamless authentication experience for both Android and iOS users.

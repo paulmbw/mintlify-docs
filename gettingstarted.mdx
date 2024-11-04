@@ -1,37 +1,49 @@
 ---
 title: "Getting Started"
-description: "Fork or clone the repository to get started"
+description: "Learn how to set up your development environment"
 ---
 
 <Info>
-  **Prerequisite**: Please install Node.js (version 18 or higher) before
-  proceeding. This project uses Node.js v18.18.0.
+  **Prerequisites**: This project requires Node.js version 18 or higher (we
+  currently use v18.18.0). Please ensure you have Node.js installed on your
+  system before proceeding with the setup process.
 </Info>
 
-There are two ways to get started with Launchtoday:
+## Initial Setup
 
-## Option 1: Fork the Repository (Recommended)
+Getting started with Launchtoday involves choosing between two initialization methods, each suited to different development needs and scenarios.
 
-This approach allows you to create multiple apps and easily manage updates:
+### Option 1: Fork the Repository (Recommended)
 
-1. Fork the repository by visiting [github.com/launchtodayhq/launchtoday-rncli](https://github.com/launchtodayhq/launchtoday-rncli) and clicking "Fork"
-2. Clone your forked repository:
+We strongly recommend forking the repository as your starting point. This approach provides several significant advantages for your development workflow.
+By creating your own fork, you'll maintain a separate version of the codebase that you can freely modify while still keeping the ability to pull updates
+from the main repository. This is particularly valuable when you plan to create multiple applications or want to contribute back to the main project.
+
+To get started with this approach:
+
+1. Navigate to [github.com/launchtodayhq/launchtoday-rncli](https://github.com/launchtodayhq/launchtoday-rncli) and click the "Fork" button in the upper
+   right corner.
+2. Once forked, clone your repository to your local machine using:
 
 ```bash
 git clone git@github.com:[YOUR_GITHUB_USERNAME]/launchtoday-rncli.git [YOUR_APP_NAME]
 ```
 
-## Option 2: Direct Clone
+### Option 2: Direct Clone
 
-If you just want to create a single app, you can clone directly:
+If you're planning to create a single application and don't need to maintain a separate fork, you can clone the repository directly. This method is simpler
+but provides less flexibility for future updates. To clone directly, use:
 
 ```bash
 git clone git@github.com:launchtodayhq/launchtoday-rncli.git [YOUR_APP_NAME]
 ```
 
-## Setting Up Your Project
+## Project Configuration
 
-Once you have cloned the repository using either method, navigate to the project directory and run the following commands:
+After successfully cloning the repository using either method above, you'll need to set up your local development environment. Follow these steps in order:
+
+1. Navigate into your newly created project directory
+2. Execute the following commands to initialize your development environment:
 
 ```bash
 nvm use
@@ -39,72 +51,103 @@ cp .env.example .env
 yarn
 ```
 
-## Platform-Specific Setup
+These commands ensure you're using the correct Node.js version, create your local environment configuration, and install all necessary dependencies.
 
-### iOS Setup
+## Platform-Specific Configuration
 
-1. Install CocoaPods dependencies:
+### iOS Configuration
+
+Setting up your iOS development environment requires a few additional steps:
+
+1. First, install all required CocoaPods dependencies by running:
 
 ```bash
 npx pod-install
 ```
 
-2. Open the iOS project in Xcode:
+2. Open your iOS project in Xcode using:
 
 ```bash
 open ios/LaunchToday.xcworkspace
 ```
 
-3. Update your Bundle Identifier:
+3. Once in Xcode, you'll need to configure several important application settings:
 
-   - In Xcode, select the "Launchtoday" project in the navigator on the left
-   - Select the "Launchtoday" target
-   - Under the "Signing & Capabilities" tab, change the Bundle Identifier from "com.launchtoday" to your chosen identifier (e.g., "com.yourcompany.appname")
+   - In the project navigator, select the "Launchtoday" project
+   - Select the "Launchtoday" target from the targets list
+   - Navigate to the "Signing & Capabilities" tab
+   - Update the Bundle Identifier to match your application (e.g., "com.yourcompany.appname")
+   - Choose your Development Team from the dropdown menu
+   - If you haven't already, you may need to sign in with your Apple ID through Xcode preferences
 
-4. Configure your Development Team:
+   ![Xcode Configuration](./images/xcode-setup.jpg)
 
-   - In the same "Signing & Capabilities" tab
-   - Select your Development Team from the dropdown
-   - If you don't have one, sign in with your Apple ID in Xcode preferences
+### Android Configuration
 
-   ![Xcode Setup](./images/xcode-setup.jpg)
+To set up your Android development environment, you can either follow our detailed step-by-step instructions below or watch our comprehensive video tutorial
+that walks you through the entire process:
 
-### Android Setup
+<iframe
+  width="100%"
+  height="400"
+  style={{ borderRadius: 10 }}
+  src="https://www.youtube.com/embed/iTidkCkdKRk"
+  title="Android Setup Video"
+  frameBorder="0"
+  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+  allowFullScreen
+></iframe>
 
-Android setup is typically ready to go after the initial project setup. Just ensure you have:
+The Android setup process requires Android Studio, which you can download from the [official Android Developer website](https://developer.android.com/studio).
+Once installed, follow these detailed steps:
 
-- Android Studio installed
-- An Android emulator set up or a physical device connected
+1. Open Android Studio and launch the AVD (Android Virtual Device) Manager, which allows you to create and manage virtual devices for testing.
 
-## Running Your App
+2. Create a new virtual device by following these steps:
 
-You can start the app using **npx expo run** and choose your platform, or use these commands:
+   - Click the "Create Virtual Device" button
+   - From the hardware profiles, select a device definition (we recommend the Pixel 9 Pro XL for optimal testing)
+   - Choose a system image (we recommend API 34 for the best compatibility)
+   - Complete the setup process by configuring any additional device settings
+
+3. Configure your application's specific settings:
+
+   - Locate and open the `android/app/build.gradle` file
+   - Find the `applicationId` under `defaultConfig` and update it to match your desired package name
+   - Make sure to sync your project with Gradle files after making these changes
+
+4. Verify that your development environment is properly configured by running:
+   ```bash
+   adb devices
+   # This command should display your connected device or emulator
+   ```
+
+## Running the Application
+
+With your environment configured, you can now launch your application. Choose the appropriate command for your target platform:
 
 ```bash
-yarn ios:simulator
+yarn ios:simulator  # Launches the app on your iOS simulator
 # or
-yarn run android
+yarn android        # Launches the app on your Android device or emulator
 ```
 
 <Info>
-  `ios:simulator` is a shortcut for running the app on a specific iOS simulator,
-  specifically targeting the iPhone 15 Pro Max. If you're having trouble
-  targeting a specific iOS simulator, check out our [FAQ guide on targeting iOS
-  simulators](/faqs#how-do-i-target-a-specific-ios-simulator).
+  By default, the `ios:simulator` command launches your app on an iPhone 15 Pro
+  Max simulator. If you need to target a different iOS simulator, please consult
+  our detailed [FAQ guide](/faqs#how-do-i-target-a-specific-ios-simulator).
 </Info>
 
-As a result, you should see something like this:
+When successfully launched, your application should display the following screen:
 
-![Running the app](./images/launchtoday.jpg)
-
+![Application Launch Screen](./images/launchtoday.jpg)
 
 ## Troubleshooting
 
-If you encounter any issues while running the app:
+If you encounter any difficulties during the setup process or while running the application, we provide several support channels:
 
-1. Check our [FAQ page](/faqs) for common problems and solutions
-2. Join our [Discord community](https://discord.gg/launchtoday) for real-time help
-3. Create a [GitHub issue](https://github.com/launchtodayhq/launchtoday-rncli/issues) if you think you've found a bug
+1. Our comprehensive [FAQ page](/faqs) addresses common issues and provides detailed solutions
+2. For real-time assistance, join our active [Discord community](https://discord.gg/launchtoday)
+3. If you believe you've discovered a bug, please create a detailed issue on our [GitHub repository](https://github.com/launchtodayhq/launchtoday-rncli/issues)
 
-Our community is here to help you get up and running quickly!
-
+Our dedicated development team and community members are committed to helping you overcome any challenges you might face during your development journey.

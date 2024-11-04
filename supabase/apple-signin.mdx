@@ -1,35 +1,56 @@
 ---
-title: 'Sign in with Apple'
-description: 'Implement Apple Sign-in with Supabase'
+title: "Sign in with Apple"
+description: "Implement Apple Sign-in with Supabase"
 ---
 
-## Prerequisites
+<img
+  src="/images/sign-in-with-apple.png"
+  alt="Supabase API Credentials"
+  style={{
+    borderRadius: "10px",
+    maxHeight: "450px",
+  }}
+/>
 
-1. Apple Developer Account
-2. App ID configured in Apple Developer Console
-3. Sign in with Apple capability enabled
+Sign in with Apple provides iOS users with a secure and familiar authentication experience. Launchtoday comes with this capability pre-configured in the application, making the setup process straightforward. The integration handles the complete authentication flow from initial sign-in to session management in your Supabase backend.
 
-## Configuration
+## Verifying Pre-configured Capabilities
 
-### 1. Apple Developer Setup
+Your Launchtoday application already includes Sign in with Apple capability. You can verify this in Xcode:
 
-1. Go to [Apple Developer Console](https://developer.apple.com/account)
-2. Navigate to Certificates, Identifiers & Profiles
-3. Configure Sign in with Apple for your App ID:
-   - Select your App ID
-   - Enable "Sign in with Apple" capability
-   - Configure the service with your domain
+1. Open your iOS project in Xcode
+2. Select the "Launchtoday" project in the navigator
+3. Choose the "Launchtoday" target
+4. Navigate to the "Signing & Capabilities" tab
+5. You should see "Sign in with Apple" listed among the capabilities
 
-### 2. Supabase Configuration
+You can also verify this in the `Launchtoday.entitlements` file [here](https://github.com/launchtodayhq/launchtoday-rncli/blob/474f79360cec689484f00906a341eddcc5c0a25e/ios/Launchtoday/Launchtoday.entitlements#L5).
 
-1. In Supabase Dashboard, go to Authentication > Providers
-2. Enable Apple provider
-3. Add your Apple credentials:
-   - Service ID
-   - Team ID
-   - Key ID
-   - Private Key
+This pre-configuration saves you time by handling the initial setup requirements.
 
-### 3. Implementation
+## Supabase Configuration
 
-Add Apple Sign-in to your app: 
+To enable Sign in with Apple in your application:
+
+1. In your Supabase Dashboard, go to Authentication > Providers
+2. Enable the Apple provider
+3. Set the Service ID to match your bundle identifier (e.g., "com.yourcompany.appname")
+
+With these configurations in place, Sign in with Apple will be fully functional in your application. The integration manages user sessions, profile creation, and secure token handling automatically through Supabase.
+
+<img
+  src="/images/supabase-apple.jpg"
+  alt="Supabase Apple Sign-in Configuration"
+  style={{
+    borderRadius: "10px",
+    maxHeight: "450px",
+  }}
+/>
+
+Once configured, you can test the Sign in with Apple flow by running the application with `yarn ios:simulator` or via Xcode.
+
+## Testing the Integration
+
+Once configured, you can test the Sign in with Apple flow by running your application with `yarn ios:simulator`. The authentication process will present users with Apple's secure sign-in interface, where they can authenticate using their Apple ID and choose whether to share or hide their email address.
+
+Remember to test both the success and failure scenarios to ensure your application handles all cases gracefully. The integration automatically manages token refresh and session persistence, providing a seamless authentication experience for your iOS users.
