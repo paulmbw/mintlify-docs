@@ -1,0 +1,84 @@
+---
+title: "Authentication Context"
+description: "Understanding the shared authentication system"
+---
+
+Launchtoday provides a centralized authentication system through a React Context provider which you can find [here](https://github.com/launchtodayhq/launchtoday-rncli/blob/main/src/providers/Auth.tsx). This context manages all authentication flows, user sessions, and authentication state throughout your application.
+You can find an example of consuming the auth context in the login screen implementation [here](https://github.com/launchtodayhq/launchtoday-rncli/blob/main/src/screens/Auth/Login/index.tsx).
+
+## Auth Context Provider
+
+The authentication context is implemented using React's Context API and provides a comprehensive set of methods and state for handling user authentication. The provider is already configured in your application's root component, making authentication services available throughout your app.
+
+### Available Methods
+
+The context exposes several authentication methods:
+
+```typescript
+// Sign in methods
+signInWithApple(): Promise<void>    // Handles Apple authentication flow
+signInWithGoogle(): Promise<void>   // Handles Google OAuth flow
+signInWithEmail(email: string): Promise<void>  // Initiates Magic Link authentication
+
+// Session management
+signOut(): Promise<void>            // Signs out the current user
+deleteAccount(): Promise<void>      // Deletes the user's account
+
+// State management
+user: User | null                   // Current user information
+loading: boolean                    // Authentication loading state
+```
+
+## Authentication Flows
+
+### Apple Sign In
+
+The `signInWithApple` method handles the complete Apple authentication flow:
+
+- Requests user consent through Apple's native UI
+- Manages identity tokens and nonce validation
+- Creates or updates the user profile in Supabase
+- Establishes the authenticated session
+
+### Google Sign In
+
+The `signInWithGoogle` method manages OAuth authentication:
+
+- Initiates the OAuth flow through a browser
+- Handles redirect and token management
+- Processes the authentication response
+- Creates or updates the user profile
+
+### Magic Link Authentication
+
+The `signInWithEmail` method implements passwordless authentication:
+
+- Sends a magic link to the provided email
+- Handles email redirect
+- Establishes the authenticated session
+
+## Session Management
+
+The Auth Context automatically manages user sessions:
+
+- Persists authentication state
+- Handles token refresh
+- Manages session expiration
+- Synchronizes state across the app
+
+## Error Handling
+
+The authentication methods include comprehensive error handling:
+
+- User cancellation handling
+- Network error management
+- Invalid token handling
+- Session expiration handling
+
+## Next Steps
+
+With the authentication context in place, you can implement specific authentication providers:
+
+- [Sign in with Apple](/supabase/apple-signin)
+- [Sign in with Google](/supabase/google-signin)
+- [Magic Link Authentication](/supabase/magic-links)
