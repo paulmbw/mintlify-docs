@@ -1,0 +1,89 @@
+---
+title: "Navigation Introduction"
+description: "Understanding the navigation system in Launchtoday"
+---
+
+Launchtoday uses [React Navigation](https://reactnavigation.org/) to provide a robust and flexible navigation system for your mobile app. This guide will help you understand how navigation is structured and implemented in the app.
+
+## Navigation Structure Overview
+
+<img
+  src="/images/Root-navigator.png"
+  alt="Navigation Structure Diagram"
+  style={{
+    borderRadius: "10px",
+    maxHeight: "450px",
+  }}
+/>
+
+The app's navigation follows a hierarchical structure with three main components:
+
+1. **Root Navigator**: The top-level navigator that manages the app's navigation state and determines whether to show authentication flows or main content.
+
+2. **Auth Navigator**: Handles all authentication-related screens using stack navigation.
+
+3. **Home Navigator**: Manages the main app content using drawer navigation with nested stack navigators for specific features.
+
+## Navigation Patterns Used
+
+### Stack Navigation
+
+Stack navigation is used for linear flows where screens are placed on top of each other, like a deck of cards. In Launchtoday, it's primarily used for:
+
+- Authentication flows
+- Step-by-step processes
+- Feature-specific flows (like payments)
+
+Key characteristics:
+
+- Screens transition from right to left (iOS) or slide up/fade (Android)
+- Automatic back button navigation
+- Maintained navigation history
+
+### Drawer Navigation
+
+Drawer navigation provides a side menu for main app navigation. It's used in the authenticated portion of the app and offers:
+
+- Side menu that slides from the left
+- Access to main app features
+- Persistent availability throughout the app
+- Toggle via hamburger menu icon
+
+## Implementation Details
+
+### 1. Root Navigator
+
+The root navigator serves as the foundation of the navigation system:
+
+- Controls the main navigation flow
+- Handles authentication state switching
+- Routes to either AuthNavigator or HomeNavigator
+
+You can find the implementation of the Root Navigator [here](https://github.com/launchtodayhq/launchtoday-rncli/blob/main/src/navigation/RootNavigator.tsx).
+
+### 2. Auth Navigator
+
+Manages the authentication flow with these screens:
+
+- Login Screen
+- Email Input Screen
+- Magic Link Sent Screen
+
+You can find the implementation of the Auth Navigator [here](https://github.com/launchtodayhq/launchtoday-rncli/blob/main/src/navigation/AuthNavigator.tsx).
+
+### 3. Home Navigator
+
+Implements the main app navigation with:
+
+- Dashboard Screen
+- Payments Navigator (nested stack)
+  - Payments Screen
+  - Stripe Screen
+  - RevenueCat Screen
+- Profile Screen
+- Feedback Screen
+
+You can find the implementation of the Home Navigator [here](https://github.com/launchtodayhq/launchtoday-rncli/blob/main/src/navigation/HomeNavigator.tsx).
+
+This structure ensures a clear separation between authenticated and unauthenticated states while maintaining a smooth user experience through well-organized navigation patterns.
+The next page will go into more detail on how to add new screens to the app.
