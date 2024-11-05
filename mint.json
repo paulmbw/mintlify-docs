@@ -56,6 +56,13 @@
       ]
     },
     {
+      "group": "Navigation",
+      "pages": [
+        "react-native-cli/navigation/introduction",
+        "react-native-cli/navigation/add-new-screens"
+      ]
+    },
+    {
       "group": "Supabase",
       "pages": [
         "react-native-cli/supabase/setup",
