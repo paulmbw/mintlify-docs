@@ -10,6 +10,10 @@ Launchtoday comes with pre-built profile and feedback screens that require speci
 - An avatars storage bucket for profile images
 - Security policies to protect user data
 
+## Quick Setup
+
+For a quick setup, you can run the complete SQL script below in your Supabase SQL editor (the URL should look like this: `https://supabase.com/project/*your-project-id*/sql/new`):
+
 ```sql
 -- Create a table for public profiles
 create table profiles (
@@ -112,20 +116,24 @@ USING (
 );
 ```
 
-## Understanding the queries
+<img
+  src="/images/supabase-queries.jpg"
+  alt="Supabase SQL Editor"
+  style={{
+    borderRadius: "10px",
+    maxHeight: "450px",
+  }}
+/>
 
-Let's break down each query to understand its purpose and functionality.
 
-### Profiles Table and Policies
+## Step-by-Step Setup Guide
 
-The profiles table and associated policies handle user profile management:
+### 1. Profiles Table
 
-- Creates a profiles table to store user data (username, avatar, website, etc) with Row Level Security enabled
-- Sets up policies to control access - public viewing allowed but updates restricted to profile owners
-- Automatically creates profile records when new users sign up via OAuth
+First, let's set up the profiles table that stores user information:
 
 ```sql
--- Create a table for public profiles
+-- Create profiles table
 create table profiles (
   id uuid references auth.users on delete cascade not null primary key,
   updated_at timestamp with time zone,
@@ -135,28 +143,35 @@ create table profiles (
   bio text,
   has_seen_onboarding boolean,
   full_name text,
-
   constraint username_length check (char_length(username) >= 3)
 );
 
--- Set up Row Level Security (RLS)
-alter table profiles
-  enable row level security;
+-- Enable RLS and set up profile policies
+alter table profiles enable row level security;
 
-create policy "Public profiles are viewable by everyone." on profiles
-  for select using (true);
+create policy "Public profiles are viewable by everyone."
+  on profiles for select using (true);
 
-create policy "Users can insert their own profile." on profiles
-  for insert with check ((select auth.uid()) = id);
+create policy "Users can insert their own profile."
+  on profiles for insert with check ((select auth.uid()) = id);
 
-create policy "Users can update own profile." on profiles
-  for update using ((select auth.uid()) = id);
+create policy "Users can update own profile."
+  on profiles for update using ((select auth.uid()) = id);
+```
 
--- Automatic profile creation
+**What this does:**
+
+- Creates a profiles table linked to auth.users
+- Enables row-level security
+- Sets up policies for viewing, creating, and updating profiles
+
+### 2. Automatic Profile Creation
+
+Set up automatic profile creation when users sign up:
+
+```sql
 create function public.handle_new_user()
-returns trigger
-set search_path = ''
-as $$
+returns trigger as $$
 begin
   insert into public.profiles (id, full_name, avatar_url)
   values (new.id, new.raw_user_meta_data->>'full_name', new.raw_user_meta_data->>'avatar_url');
@@ -169,13 +184,14 @@ create trigger on_auth_user_created
   for each row execute procedure public.handle_new_user();
 ```
 
-### Feedback Table and Policies
+**What this does:**
 
-The feedback table and associated policies handle user feedback management:
+- Creates a trigger function that runs when new users sign up
+- Automatically creates profile entries for new users
 
-- Creates a feedback table to store user feedback (type, title, description, etc) with Row Level Security enabled
-- Sets up policies to control access - viewing and updates restricted to feedback owners
-- Allows authenticated users to submit and view their own feedback
+### 3. Feedback Table
+
+Next, set up the feedback system:
 
 ```sql
 create table feedback (
@@ -187,83 +203,76 @@ create table feedback (
   created_at timestamp with time zone
 );
 
--- Set up Row Level Security (RLS) for feedback table
-alter table feedback
-  enable row level security;
+-- Enable RLS and set up feedback policies
+alter table feedback enable row level security;
 
--- Add policies for feedback table
-create policy "Users can view their own feedback." on feedback
-  for select using ((select auth.uid()) = user_id);
+create policy "Users can view their own feedback."
+  on feedback for select using ((select auth.uid()) = user_id);
 
-create policy "Users can insert their own feedback." on feedback
-  for insert with check ((select auth.uid()) = user_id);
+create policy "Users can insert their own feedback."
+  on feedback for insert with check ((select auth.uid()) = user_id);
 ```
 
-### Avatar Storage Setup
+**What this does:**
 
-The avatars bucket and associated policies handle profile image management:
+- Creates a feedback table for user submissions
+- Enables row-level security
+- Sets up policies so users can only view and create their own feedback
 
-- Creates an avatars storage bucket to store user profile pictures
-- Sets up policies to control access - authenticated users can read all avatars
-- Restricts uploads, updates and deletes to the avatar owner's folder
+### 4. Avatar Storage
+
+Finally, set up the storage system for profile pictures:
 
 ```sql
--- Set up Storage!
+-- Create avatar storage bucket
 insert into storage.buckets (id, name)
   values ('avatars', 'avatars');
 
 -- Set up storage policies
 CREATE POLICY "allow_avatar_reads"
-ON storage.objects FOR SELECT
-USING (
-    bucket_id = 'avatars'::text
-    AND auth.role() = 'authenticated'::text
-);
+  ON storage.objects FOR SELECT
+  USING (bucket_id = 'avatars'::text AND auth.role() = 'authenticated'::text);
 
 CREATE POLICY "allow_avatar_uploads"
-ON storage.objects FOR INSERT
-WITH CHECK (
+  ON storage.objects FOR INSERT
+  WITH CHECK (
     bucket_id = 'avatars'::text
     AND auth.role() = 'authenticated'::text
     AND (auth.uid())::text = (storage.foldername(name))[1]
-);
+  );
 
-CREATE POLICY "allow_avatar_updates"
-ON storage.objects FOR UPDATE
-USING (
-    bucket_id = 'avatars'::text
-    AND auth.role() = 'authenticated'::text
-    AND (auth.uid())::text = (storage.foldername(name))[1]
-);
-
-CREATE POLICY "allow_avatar_deletes"
-ON storage.objects FOR DELETE
-USING (
-    bucket_id = 'avatars'::text
-    AND auth.role() = 'authenticated'::text
-    AND (auth.uid())::text = (storage.foldername(name))[1]
-);
+-- Similar policies for updates and deletes...
 ```
 
-## Setting Up Your Database
+**What this does:**
 
-You'll need to run these SQL queries in your Supabase project to enable these features. Navigate to the SQL editor in your Supabase project and paste the script above.
+- Creates a storage bucket for avatars
+- Sets up policies for reading, uploading, updating, and deleting avatars
 
-1. Open your Supabase project's SQL editor
-2. Copy and paste the complete setup script first
-3. Test the setup by:
+## Verifying the Setup
 
-   - Creating a new user (should auto-create profile)
-   - Submitting feedback
-   - Uploading a profile picture
+After running the scripts, verify your setup by testing the app:
 
-   <img
-     src="/images/supabase-queries.jpg"
-     alt="OAuth Credentials"
-     style={{
-       borderRadius: "10px",
-       maxHeight: "450px",
-     }}
-   />
+1. Start the app using either:
+   - `yarn ios-simulator` for iOS
+   - `yarn android` for Android
 
-Once completed, your Launchtoday app will have working profile, feedback, and avatar management features.
+2. Log into the app and verify the following:
+
+   - Navigate to the Profile screen and test that you can:
+     - Upload a profile picture
+     - Set your username
+     - Add a website URL
+     - Write a bio
+
+   - Go to the Feedback screen and verify you can:
+     - Submit a feature request
+     - Report a bug
+
+3. Check your Supabase dashboard to confirm:
+   - New entries appear in the profiles table
+   - Feedback submissions show up in the feedback table
+   - Profile images are stored in the avatars storage bucket
+
+If you encounter any issues, check the app logs and Supabase dashboard for error messages.
+
