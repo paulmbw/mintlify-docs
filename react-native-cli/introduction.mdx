@@ -1,16 +1,12 @@
 ---
-title: Introduction
-description: "Welcome to the Launchtoday React Native CLI documentation."
+title: # Welcome to Launchtoday
+description: "Welcome to the Launchtoday."
 ---
 
-# What is Launchtoday?
-
-Launchtoday is a powerful React Native CLI tool that helps developers launch production-ready mobile apps faster. It provides a carefully crafted boilerplate with pre-configured essential features, best practices, and integrations that modern mobile apps need.
-
-Instead of spending weeks on initial setup and configuration, Launchtoday gives you a robust foundation to build upon, allowing you to focus on your app's unique features from day one.
+Launchtoday is a production-ready React Native CLI mobile app template that helps you build iOS and Android apps faster. Skip weeks of setup work and start building your app's unique features immediately. With authentication, navigation, and other essential features pre-configured, Launchtoday provides the solid foundation you need to bring your app idea to life.
 
 <Info>
-  Looking for the Expo version? [Click here](/expo/introduction) to
+  Looking for Launchtoday built with Expo? [Click here](/expo/introduction) to
   check out our Expo template documentation.
 </Info>
 
@@ -21,9 +17,6 @@ Instead of spending weeks on initial setup and configuration, Launchtoday gives 
     alt="Hero Light"
     style={{ borderRadius: "10px", maxHeight: "450px" }}
   />
-</div>
-
-<div className="flex flex-row gap-4 items-center justify-center">
   <img
     className="hidden dark:block"
     src="/images/557shots_so.png"
@@ -32,114 +25,208 @@ Instead of spending weeks on initial setup and configuration, Launchtoday gives 
   />
 </div>
 
-## Getting Started
+## Quick Links
 
-Before diving into the documentation, you can download Launchtoday on the App Store and Google Play Store:
+- 📱 [Installation Guide](/react-native-cli/installation)
+- 🚀 [Getting Started](/react-native-cli/gettingstarted)
+- 💡 [Example Apps](#example-apps)
+- 🤝 [Support](#need-help)
 
-<div className="flex flex-row gap-4 items-center ">
-  <img
-    className=""
-    src="/images/ios-download.svg"
-    alt="iOS Download"
-    style={{ borderRadius: "10px", maxHeight: "510px" }}
-  />
+## Try Our Demo App
 
-  <img
-    className=""
-    src="/images/google-download.png"
-    alt="Android Download"
-    style={{
-      borderRadius: "10px",
-      width: "140px",
-      height: "100%",
-      objectFit: "contain",
-      backgroundColor: "#000",
-    }}
-  />
+You can try our demo app by downloading it from the App Store and Google Play.
+
+<div className="flex flex-row gap-4 items-center">
+  <a target="_blank" href="https://launchtoday.dev/">
+    <img
+      noZoom
+      src="/images/ios-download.svg"
+      alt="Download on App Store"
+      style={{
+        borderRadius: "10px",
+        width: "130px",
+        height: "100%",
+        objectFit: "contain",
+        backgroundColor: "#000",
+      }}
+    />
+  </a>
+
+  <a target="_blank" href="https://launchtoday.dev/">
+    <img
+      noZoom
+      src="/images/google-download.png"
+      alt="Get it on Google Play"
+      style={{
+        borderRadius: "10px",
+        width: "148px",
+        height: "100%",
+        objectFit: "contain",
+        backgroundColor: "#000",
+      }}
+    />
+  </a>
 </div>
 
-## Core Features
+## Why Choose Launchtoday?
 
-Launchtoday comes with everything you need to build a professional mobile app:
+Launchtoday comes pre-configured with everything you need to build a professional mobile app:
 
-### Authentication & Security
+### 🔐 Authentication & Security
 
-- Apple, Google, and Magic Link (passwordless email) sign-in powered by Supabase
-- Secure data storage with encryption
-- API request caching and retry logic
-- Certificate pinning for API security
+- Supabase Auth with social providers (Apple, Google)
+- Magic link authentication
+- Row Level Security (RLS) policies
+- JWT token management and secure storage
 
-### Backend Infrastructure
+### 💳 Payments & Monetization
 
-- Ready-to-use Supabase PostgreSQL database
-- S3-compatible storage bucket integration
-- Local data persistence
-- Offline-first architecture with background sync
+- Stripe Payment Sheet with Apple Pay & Google Pay support
+- RevenueCat integration for:
+  - In-app purchases
+  - Subscription management 
+  - Consumable items
+- Multi-currency support through Stripe
 
-### Payments & Monetization
+### ⚡ Backend & Infrastructure
 
-- Stripe integration for one-time payments
-- RevenueCat implementation for in-app purchases
-- Subscription management for iOS and Android
-- Multi-currency support
+- Supabase PostgreSQL database
+- S3-compatible storage through Supabase
+- TypeScript Koa API service with:
+  - Rate limiting
+  - Security middleware
 
-### Development & Deployment
 
-- Automated CI/CD pipeline with GitHub Actions
-- Fastlane integration for automated deployments
-- End-to-end testing with Appium
-- Beta distribution workflows
+### 🎨 User Experience
 
-### User Experience
-
-- Push notifications via OneSignal
-- Deep linking for both platforms
-- In-app messaging and chat
-- Dark/light theme support
+- Push notifications (OneSignal)
+- Deep linking
+- Dark/light themes
+- Multi-language support with RTL
 - Responsive layouts
 - Pre-built UI components
-- Multi-language support with RTL layouts
 
-### Analytics & Monitoring
+### 📊 Development Tools
 
-- Performance monitoring
-- Crash reporting
-- User behavior analytics
-- A/B testing capabilities
+- Automated build & release pipeline with:
+  - Fastlane for iOS/Android deployment
+  - GitHub Actions CI/CD workflows
+  - Automated versioning and changelogs
+  - App Store & Play Store publishing
+- End-to-end testing with Detox
+- Analytics and crash reporting
+- Beta distribution through TestFlight & Play Console
 
-## Upcoming Features
+## What's Coming Next?
 
-We're actively working on expanding Launchtoday's capabilities:
+We're constantly improving Launchtoday. Here's what's on our roadmap:
 
-### Enhanced Monitoring
+### Q2 2024
 
-- Sentry integration for error tracking
-- Highlight.io for session replay
-- Advanced analytics dashboard
+- Crash reporting options:
+  - Highlight.io integration
+  - Sentry integration
+- Session replay & debugging:
+  - Highlight.io replay
+  - UXCam session recording
+- Advanced analytics dashboard with Mixpanel
+- Expo template release
+- In-app review prompts (App Store & Play Store)
+- Subscription management:
+  - Adapty integration
+  - RevenueCat alternatives
+- Superwall paywall A/B testing
+- Push notification providers:
+  - Salesforce Marketing Cloud
+  - Firebase Cloud Messaging
+- Health & Fitness Integration:
+  - Apple HealthKit
+  - Google Fit
+  - Health data visualization
+  - Activity tracking components
+- Home Screen Widgets:
+  - iOS WidgetKit support
+  - Android App Widgets
+  - Dynamic widget updates
+  - Health data widgets
+  - IoT status widgets
+- Offline-first architecture:
+  - WatermelonDB integration
+  - Realm Database support
+  - Offline sync patterns
+  - Conflict resolution
+- IoT Device Integration:
+  - BLE device management
+  - AWS IoT Core integration
+  - Google Cloud IoT support
+  - MQTT protocol support
+  - HomeKit compatibility
+  - Matter protocol support
+- LaunchDarkly feature flags
+- AppsFlyer attribution & analytics
+- Pre-built UI Component Library:
+  - Instagram-style Stories viewer
+  - Tinder-style card swiper
+  - Social media feed components
+  - Rich media carousel
+  - Interactive bottom sheets
+  - IoT device control panels
+  - Health metrics visualization
+  - Workout tracking interfaces
 
-### Alternative Templates
+### Q3 2024
 
-- Expo-based template
-- Enterprise-focused template
-
-### Enterprise Features
-
+- Enterprise template
 - Shopify integration
-- Salesforce connectivity
 - Advanced security features
-- Performance optimizations
-
-### User Engagement
-
-- In-app tutorials
-- User feedback tools
-- Referral program system
-- Content management system
+- In-app tutorials with Appcues
+- User feedback system with Instabug
+- QA & Testing:
+  - Appium automated testing
+  - Maestro E2E testing
+  - Firebase Test Lab
+  - IoT device simulation
+  - Health data mocking
+- ASO optimization toolkit:
+  - Keyword research tools
+  - Screenshot generation
+  - A/B testing templates
+  - Rating prompts optimization
+- Performance monitoring:
+  - Datadog APM
+  - Firebase Performance
+  - IoT metrics tracking
+  - Health data sync monitoring
+- Growth tools:
+  - Branch.io deep linking
+  - Viral loops integration
+  - Referral system templates
+- Advanced Marketing Components:
+  - Custom event tracking
+  - Cohort analysis tools
+  - Attribution dashboards
+  - IoT usage analytics
+  - Health data insights
+- Automated localization with Lokalise
+- Advanced Offline Capabilities:
+  - Background sync workers
+  - Queue management
+  - Offline-first analytics
+  - Progressive data synchronization
+  - Offline IoT device control
+  - Offline health data recording
 
 ## Need Help?
 
-We're here to support you:
+We offer multiple support channels:
 
-- **GitHub Issues**: Visit our [GitHub repository](https://github.com/your-repo-link)
-- **Discord Community**: Join our [Discord channel](https://discord.gg/8RU6VUvuWK)
-- **Email Support**: Contact us at [paul@launchtoday.com](mailto:support@launchtoday.com)
+- 💬 [Join our Discord Community](https://discord.gg/8RU6VUvuWK)
+- 📧 Email us at [paul@launchtoday.com](mailto:paul@launchtoday.com)
+- 🐛 [Report issues on GitHub](https://github.com/your-repo-link)
+- 📚 [Read our Troubleshooting Guide](/troubleshooting)
+
+## Example Apps
+
+Check out these apps built with Launchtoday:
+
+[Coming soon - We'll showcase real-world examples here]

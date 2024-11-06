@@ -51,12 +51,12 @@
       "group": "Getting Started",
       "pages": [
         "react-native-cli/introduction",
-        "react-native-cli/dependencies",
-        "react-native-cli/gettingstarted"
+        "react-native-cli/installation",
+        "react-native-cli/dependencies"
       ]
     },
     {
-      "group": "Navigation",
+      "group": "React Navigation in Launchtoday",
       "pages": [
         "react-native-cli/navigation/introduction",
         "react-native-cli/navigation/add-new-screens"

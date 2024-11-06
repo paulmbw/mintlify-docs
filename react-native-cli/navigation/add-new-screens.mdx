@@ -28,7 +28,7 @@ As highlighted in the diagram, adding a new screen or stack to the Auth Navigato
 The Auth Navigator uses stack navigation, which is ideal for linear, step-by-step flows where users need to complete actions in sequence before accessing the main app.
 Here is an example of how to add a new screen to the Auth Navigator:
 
-```typescript
+```tsx
 const AuthNavigator = () => {
   return (
     <Stack.Navigator screenOptions={{ headerShown: false }}>
@@ -43,7 +43,7 @@ const AuthNavigator = () => {
 
 You would then navigate to the new screen using the `navigate` function:
 
-```typescript
+```tsx
 navigation.navigate("YourNewScreen");
 ```
 
@@ -59,7 +59,7 @@ The Home Navigator uses drawer navigation, which is ideal for organizing and cat
 
 Here is an example of how to add a new screen to the Home Navigator:
 
-```typescript
+```tsx
 const HomeNavigator = () => {
   const drawerOptions = [
     {

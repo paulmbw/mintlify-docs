@@ -1,11 +1,43 @@
 ---
-title: "Navigation Introduction"
+title: "Introduction"
 description: "Understanding the navigation system in Launchtoday"
 ---
 
 Launchtoday uses [React Navigation](https://reactnavigation.org/) to provide a robust and flexible navigation system for your mobile app. This guide will help you understand how navigation is structured and implemented in the app.
 
-## Navigation Structure Overview
+## Navigation Patterns
+
+Before diving into the app's structure, let's understand the two main navigation patterns used:
+
+### Stack Navigation
+
+Stack navigation provides a way to move between screens where each new screen is placed on top of a stack. Think of it like a deck of cards.
+
+**Key Features:**
+
+- Right-to-left transitions (iOS)
+- Slide up/fade transitions (Android)
+- Automatic back navigation
+- History management
+
+**Common Use Cases:**
+
+- Authentication flows
+- Multi-step forms
+- Feature-specific workflows
+
+### Drawer Navigation
+
+Drawer navigation provides a side menu that can be pulled out from the edge of the screen, commonly used for top-level navigation.
+
+**Key Features:**
+
+- Left-side menu access
+- Persistent throughout app
+- Customizable menu items
+- Gesture support
+
+## Navigation Structure
 
 <img
   src="/images/Root-navigator.png"
@@ -18,72 +50,42 @@ Launchtoday uses [React Navigation](https://reactnavigation.org/) to provide a r
 
 The app's navigation follows a hierarchical structure with three main components:
 
-1. **Root Navigator**: The top-level navigator that manages the app's navigation state and determines whether to show authentication flows or main content.
+### Root Navigator
 
-2. **Auth Navigator**: Handles all authentication-related screens using stack navigation.
+The Root Navigator acts as the main traffic controller for the entire app's navigation. Its primary purpose is to manage authentication state and direct users to the appropriate part of the app.
 
-3. **Home Navigator**: Manages the main app content using drawer navigation with nested stack navigators for specific features.
+Key functions:
 
-## Navigation Patterns Used
+- Determines if user is logged in or not
+- Shows loading states during authentication checks
+- Routes users to either auth flows or main app content
 
-### Stack Navigation
+The Root Navigator exists to provide a single source of truth for app navigation, create clear separation between public and private content, and manage the initial app loading experience.
 
-Stack navigation is used for linear flows where screens are placed on top of each other, like a deck of cards. In Launchtoday, it's primarily used for:
+### Auth Navigator
 
-- Authentication flows
-- Step-by-step processes
-- Feature-specific flows (like payments)
+The Auth Navigator handles the authentication flow using a stack-based navigation pattern. Its primary purpose is to guide users through the passwordless authentication process in a linear sequence.
 
-Key characteristics:
+Key functions:
 
-- Screens transition from right to left (iOS) or slide up/fade (Android)
-- Automatic back button navigation
-- Maintained navigation history
+- Manages the flow between authentication screens
+- Provides a headerless navigation experience
+- Implements TypeScript support for type-safe navigation
 
-### Drawer Navigation
+The Auth Navigator exists to create a seamless authentication experience, handling the progression from initial login through email verification, with each screen building upon the previous step in the authentication process.
 
-Drawer navigation provides a side menu for main app navigation. It's used in the authenticated portion of the app and offers:
+### Home Navigator
 
-- Side menu that slides from the left
-- Access to main app features
-- Persistent availability throughout the app
-- Toggle via hamburger menu icon
+The Home Navigator serves as the control center for authenticated users, managing the main application interface using a drawer-based navigation pattern. Its primary purpose is to provide access to all main features while maintaining a consistent and intuitive navigation experience.
 
-## Implementation Details
+Key functions:
 
-### 1. Root Navigator
+- Manages drawer-based navigation with customizable side menu
+- Handles nested stack navigation for complex features like payments
+- Controls modal displays and bottom sheets for settings and information
+- Manages user account actions (logout, delete account)
 
-The root navigator serves as the foundation of the navigation system:
+The Home Navigator exists to provide a rich, feature-complete interface for authenticated users, combining multiple navigation patterns to create an intuitive and accessible user experience while maintaining consistent navigation state across the app.
 
-- Controls the main navigation flow
-- Handles authentication state switching
-- Routes to either AuthNavigator or HomeNavigator
-
-You can find the implementation of the Root Navigator [here](https://github.com/launchtodayhq/launchtoday-rncli/blob/main/src/navigation/RootNavigator.tsx).
-
-### 2. Auth Navigator
-
-Manages the authentication flow with these screens:
-
-- Login Screen
-- Email Input Screen
-- Magic Link Sent Screen
-
-You can find the implementation of the Auth Navigator [here](https://github.com/launchtodayhq/launchtoday-rncli/blob/main/src/navigation/AuthNavigator.tsx).
-
-### 3. Home Navigator
-
-Implements the main app navigation with:
-
-- Dashboard Screen
-- Payments Navigator (nested stack)
-  - Payments Screen
-  - Stripe Screen
-  - RevenueCat Screen
-- Profile Screen
-- Feedback Screen
-
-You can find the implementation of the Home Navigator [here](https://github.com/launchtodayhq/launchtoday-rncli/blob/main/src/navigation/HomeNavigator.tsx).
-
-This structure ensures a clear separation between authenticated and unauthenticated states while maintaining a smooth user experience through well-organized navigation patterns.
-The next page will go into more detail on how to add new screens to the app.
+### Next Steps
+The next step is to learn how to add new screens or navigators in the app.
