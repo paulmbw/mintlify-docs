@@ -1,17 +1,62 @@
 ---
-title: 'Edge Functions'
-description: 'Deploy and manage Supabase Edge Functions'
+title: "Edge Functions"
+description: "Deploy and manage Supabase Edge Functions"
 ---
 
 ## Overview
 
-Supabase Edge Functions are server-side functions that run on the edge, close to your users. They're built on Deno and can be used for:
-- Custom API endpoints
-- Webhooks
-- Background jobs
-- Complex database operations
+Supabase Edge Functions are server-side TypeScript functions that run on [Deno](https://deno.com/), deployed globally at the edge - closer to your users. They provide a powerful way to execute server-side code without managing traditional server infrastructure.
 
-## Setup
+Edge Functions combine the best of serverless computing with edge computing capabilities. By running your code at the edge, closer to your users, you get significantly lower latency compared to traditional server deployments. These functions are built on Deno's secure runtime, giving you access to a modern JavaScript environment with built-in TypeScript support.
+
+### Key Benefits
+
+Edge Functions provide automatic scaling without any configuration needed - they scale from zero to handling thousands of requests seamlessly. Security is built into the core, with JWT verification and secure environment variables management coming out of the box.
+
+Key features include:
+
+- **Global Distribution**: Functions are deployed across multiple regions for low-latency responses
+- **TypeScript/JavaScript**: Write in familiar TypeScript with full Deno support
+- **Secure**: Built-in security with JWT verification and environment variables
+
+## Getting Started
+
+### Project Structure
+
+Launchtoday includes a pre-configured edge function for secure user account deletion in the following structure (which you can find [here](https://github.com/launchtodayhq/launchtoday-rncli/tree/main/supabase)):
+
+```
+supabase/
+├── functions/
+│   └── user-self-delete/
+│       ├── index.ts        # Main function code
+│       ├── .env           # Local environment variables (git-ignored)
+│       └── .env.example   # Template for environment variables
+├── config.toml            # Supabase configuration
+└── seed.sql              # Database seeds
+```
+
+### Environment Setup
+
+Edge functions use `.env` files for local development and the Supabase dashboard for production secrets:
+
+```bash
+# .env.example
+SUPABASE_URL=your-project-url
+SUPABASE_ANON_KEY=your-anon-key
+SUPABASE_SERVICE_ROLE_KEY=your-service-role-key
+```
+
+Best practices for environment variables:
+
+1. **Never commit secrets**: The `.env` file is git-ignored by default
+2. **Use different keys**: Development and production should use different keys
+3. **Limit service role usage**: Only use `SERVICE_ROLE_KEY` when absolutely necessary
+4. **Validate early**: Check for required variables at the start of your function
+
+## User Self-Delete Function
+
+Launchtoday includes a pre-built edge function for secure user account deletion. This function handles both the auth user and related profile data deletion securely. Here's how to deploy and use it:
 
 ### 1. Install Supabase CLI
 
@@ -26,87 +71,63 @@ yarn global add supabase
 supabase --version
 ```
 
-### 2. Initialize Edge Functions
+### 2. Deploy Function
 
 ```bash
-# Create new edge functions directory
-supabase functions new my-function
+# Navigate to the edge functions directory
+cd supabase/functions
 
-# Project structure
-my-function/
-  ├── .env
-  ├── index.ts
-  └── supabase.ts
+# Deploy to your Supabase instance
+supabase functions deploy user-self-deletion
 ```
 
-### 3. Create an Edge Function
-
-```typescript
-// index.ts
-import { serve } from 'https://deno.land/std@0.168.0/http/server.ts'
-import { createClient } from 'https://esm.sh/@supabase/supabase-js@2'
-
-serve(async (req) => {
-  try {
-    const supabase = createClient(
-      Deno.env.get('SUPABASE_URL') ?? '',
-      Deno.env.get('SUPABASE_ANON_KEY') ?? ''
-    )
-
-    // Your function logic here
-    const { data, error } = await supabase
-      .from('your_table')
-      .select('*')
-      .limit(10)
-
-    return new Response(
-      JSON.stringify({ data, error }),
-      { headers: { 'Content-Type': 'application/json' } }
-    )
-  } catch (error) {
-    return new Response(
-      JSON.stringify({ error: error.message }),
-      { status: 500, headers: { 'Content-Type': 'application/json' } }
-    )
-  }
-})
-```
-
-## Deployment
-
-### 1. Deploy Function
+### 3. Set Production Secrets
 
 ```bash
-# Deploy to production
-supabase functions deploy my-function
+# Set multiple secrets from .env file
+supabase secrets set --env-file ./supabase/functions/user-self-delete/.env
 
-# Deploy with secrets
-supabase secrets set MY_API_KEY=secret123
+# List all secrets
+supabase secrets list
 ```
 
-### 2. Invoke from Client
+### 4. Invoke from Client
+
+The function is already integrated with the Launchtoday template which you can find [here](https://github.com/launchtodayhq/launchtoday-rncli/blob/4ea6ff5248cc40f2ffd075cfe8adc1f0ea5bf8d7/src/providers/Auth.tsx#L326-L356). Here's an example of how to invoke it:
 
 ```typescript
-import { supabase } from '@/lib/supabase';
+import { supabase } from "@/lib/supabase";
 
-const invokeFunction = async () => {
+const deleteAccount = async () => {
   try {
-    const { data, error } = await supabase.functions.invoke('my-function', {
-      body: { name: 'World' },
-    });
-    
+    const { data, error } = await supabase.functions.invoke(
+      "user-self-deletion"
+    );
     if (error) throw error;
-    console.log('Response:', data);
-    
+    console.log("Account deleted successfully");
   } catch (error) {
-    console.error('Function error:', error);
+    console.error("Error deleting account:", error);
   }
 };
 ```
 
-## Best Practices
+## Creating Custom Functions
+
+### Common Use Cases
+
+Edge Functions excel at handling real-time operations and complex business logic. Common applications include:
+
+- Processing data transformations before or after database operations
+- Implementing custom authentication flows
+- Integrating with third-party APIs securely
+- Managing background jobs and scheduled tasks
+
+### Best Practices
+
+When creating additional edge functions, follow these patterns:
 
 1. **Error Handling**
+
 ```typescript
 try {
   // Your function logic
@@ -114,31 +135,77 @@ try {
   return new Response(
     JSON.stringify({
       error: error.message,
-      stack: process.env.NODE_ENV === 'development' ? error.stack : undefined
+      stack: process.env.NODE_ENV === "development" ? error.stack : undefined,
     }),
     { status: 500 }
-  )
+  );
 }
 ```
 
-2. **Environment Variables**
-```typescript
-// Access environment variables
-const apiKey = Deno.env.get('MY_API_KEY')
-if (!apiKey) throw new Error('MY_API_KEY is required')
-```
+2. **CORS Headers**
 
-3. **CORS Headers**
 ```typescript
 const corsHeaders = {
-  'Access-Control-Allow-Origin': '*',
-  'Access-Control-Allow-Methods': 'POST',
-  'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
-}
+  "Access-Control-Allow-Origin": "*",
+  "Access-Control-Allow-Methods": "POST",
+  "Access-Control-Allow-Headers":
+    "authorization, x-client-info, apikey, content-type",
+};
 ```
 
-## Monitoring & Debugging
+## Development & Monitoring
 
-1. View logs in Supabase Dashboard
-2. Use local development with `supabase functions serve`
-3. Test functions with `curl` or Postman
+During development, you'll want to test your edge functions locally before deploying them to production. The Supabase CLI provides powerful tools for local development and testing. Start by running your functions locally using `supabase functions serve`. This command starts a local server that mimics the production environment, allowing you to test your functions as if they were deployed.
+
+For the user-self-delete function specifically, you can run:
+
+```bash
+supabase functions serve user-self-delete --env-file ./supabase/functions/user-self-delete/.env
+```
+
+### Testing Your Functions
+
+Testing edge functions can be done through various methods. The simplest approach is using cURL from your terminal. For example, to test the user-self-delete function locally:
+
+```bash
+curl -L -X POST 'http://localhost:54321/functions/v1/user-self-delete' \
+-H 'Authorization: Bearer your-jwt-token'
+```
+
+For more complex testing scenarios, Postman provides a user-friendly interface. Simply set up your request with the appropriate headers and body, and you can save these configurations for repeated testing.
+
+### Monitoring and Debugging
+
+Monitoring your edge functions is crucial for maintaining a healthy production environment. The Supabase Dashboard provides comprehensive logging and monitoring capabilities. Navigate to Edge Functions → Logs in your dashboard to view detailed execution logs, including error messages and stack traces.
+
+During local development, your functions will output logs directly to your terminal. Use `console.log()` statements strategically to debug issues, but remember to remove or condition them before deploying to production. For production errors, `console.error()` statements are automatically captured in the dashboard logs.
+
+The dashboard also provides insights into your function's performance metrics, including execution time and memory usage. While function alerts are coming soon, you can monitor these metrics manually to ensure optimal performance.
+
+### Deployment Strategy
+
+When deploying edge functions, it's important to follow a structured approach. Start by testing thoroughly in your local environment, then deploy to a staging project before pushing to production. Here's a typical deployment workflow:
+
+```bash
+# Deploy to staging
+supabase functions deploy user-self-delete --project-ref your-test-project
+
+# After testing, deploy to production
+supabase functions deploy user-self-delete --project-ref your-prod-project
+```
+
+Version management is also crucial for maintaining stable deployments. You can deploy specific versions and rollback if needed:
+
+```bash
+supabase functions deploy user-self-delete:v1
+```
+
+Environment variables and secrets should be managed carefully across different environments. The Supabase CLI provides commands to manage these securely:
+
+```bash
+# Manage your secrets
+supabase secrets set MY_API_KEY=xxxxxx
+supabase secrets list
+```
+
+Remember to keep your production secrets separate from development and never commit sensitive information to version control. The `.env` file in your local environment should mirror the structure of your production secrets while using development-safe values.

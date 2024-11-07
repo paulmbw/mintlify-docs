@@ -79,6 +79,19 @@
       "pages": ["setup", "endpoints"]
     },
     {
+      "group": "Stripe",
+      "pages": [
+        "react-native-cli/stripe"
+      ]
+    },
+    {
+      "group": "RevenueCat",
+      "pages": [
+        "react-native-cli/revenueCat-ios",
+        "react-native-cli/revenueCat-android"
+      ]
+    },
+    {
       "group": "Fastlane",
       "pages": ["setup"]
     },
