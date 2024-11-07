@@ -1,0 +1,30 @@
+---
+title: 'RevenueCat Integration for Android'
+description: 'Manage in-app purchases and subscriptions on Android'
+---
+
+## Overview
+
+RevenueCat provides:
+- In-app purchase management
+- Subscription analytics
+- Cross-platform receipt validation
+
+## Configuration for Android
+
+### 1. RevenueCat Setup
+
+1. Create account at [revenuecat.com](https://www.revenuecat.com)
+2. Create a new app
+3. Configure products and subscriptions
+
+### 2. SDK Integration for Android
+
+```typescript
+import Purchases from 'react-native-purchases';
+
+Purchases.configure({
+  apiKey: 'your_android_api_key',
+  appUserID: 'user_id' // Optional
+});
+``` 
