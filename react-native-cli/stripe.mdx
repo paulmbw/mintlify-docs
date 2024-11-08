@@ -1,34 +1,193 @@
 ---
-title: 'Stripe Integration'
-description: 'Implement secure payments with Stripe'
+title: "Stripe Integration"
+description: "Accept payments securely with Stripe"
 ---
 
-## Overview
+Stripe integration enables secure payment processing in Launchtoday. The app comes with Stripe pre-configured, providing a robust payment infrastructure that supports one-time payments, subscriptions, and digital wallet payments like Apple Pay and Google Pay.
 
-The Stripe integration enables:
-- One-time payments
-- Subscription billing
-- Payment method management
+## Prerequisites
 
-## Setup
+Before beginning the setup, ensure you have:
 
-### 1. Stripe Account Setup
+1. A Stripe account
+   - Sign up at [stripe.com](https://stripe.com)
+   - Complete the basic account verification
+2. API Keys from your Stripe Dashboard
+   - Navigate to Developers > API Keys
+   - You'll need both Publishable and Secret keys
 
-1. Create a [Stripe account](https://stripe.com)
-2. Get your API keys from the Dashboard
-3. Install dependencies:
+<Note>
+  Keep your Secret Key private and never expose it in your client-side code. The
+  Secret Key should only be used in your backend services.
+</Note>
 
-```bash
-yarn add @stripe/stripe-react-native
+## Setup Process
+
+### 1. Environment Configuration
+
+Launchtoday already includes the Stripe integration code. To activate it, you only need to add your Stripe credentials to your environment variables:
+
+```bash:.env
+STRIPE_PUBLISHABLE_KEY=pk_test_your_publishable_key
+STRIPE_SECRET_KEY=sk_test_your_secret_key
+STRIPE_MERCHANT_IDENTIFIER=merchant.com.yourapp # Required for Apple Pay
 ```
 
-### 2. Initialize Stripe
+### 2. Stripe Provider
+
+The Stripe provider is already implemented in Launchtoday ([view in Github](https://github.com/launchtodayhq/launchtoday-rncli/blob/main/src/providers/stripe.tsx)). The provider:
+
+- Automatically reads Stripe credentials from your environment variables
+- Provides warning messages if credentials are missing
+- Exports `initPaymentSheet` and `presentPaymentSheet` utilities for payment processing
+- Wraps Launchtoday with Stripe's context provider
+
+The provider is already integrated into Launchtoday's root component [here](https://github.com/launchtodayhq/launchtoday-rncli/blob/main/App.tsx), so no additional setup is required.
+
+Once you've added your Stripe credentials to your environment variables, you're ready to start processing payments. Here is what the payment sheet from Stripe looks like on iOS and Android:
+
+**iOS:**
+<img
+  src="/images/stripe-ios.png"
+  alt="Stripe iOS"
+  style={{
+    borderRadius: "10px",
+    maxHeight: "450px",
+  }}
+/>
+
+**Android:**
+<img
+  src="/images/stripe-android.png"
+  alt="Stripe Android"
+  style={{
+    borderRadius: "10px",
+    maxHeight: "450px",
+  }}
+/>
+
+### 3. Digital Wallet Setup
+
+#### Apple Pay Configuration
+
+1. Register for an Apple Merchant ID in your [Apple Developer Account](https://developer.apple.com)
+2. Add the merchant identifier to your environment variables
+3. In your Stripe Dashboard:
+   - Navigate to Settings > Payment Methods
+   - Enable Apple Pay
+   - Complete domain verification if needed
+
+#### Google Pay Configuration
+
+1. In your Stripe Dashboard:
+   - Navigate to Settings > Payment Methods
+   - Enable Google Pay
+2. No additional code changes required - the integration is already handled
+
+## Using the Integration
+
+### Payment Sheet Implementation
+
+The Payment Sheet component is pre-configured in your application. To process a payment:
 
 ```typescript
-import { initStripe } from '@stripe/stripe-react-native';
+import { useStripe } from "@/hooks/useStripe";
 
-await initStripe({
-  publishableKey: 'your_publishable_key',
-  merchantIdentifier: 'your_merchant_identifier', // Apple Pay
-});
-``` 
+const PaymentScreen = () => {
+  const { initPayment } = useStripe();
+
+  const handlePayment = async () => {
+    try {
+      const result = await initPayment({
+        amount: 1000, // Amount in cents
+        currency: "usd",
+        description: "Product purchase",
+      });
+
+      if (result.success) {
+        // Handle successful payment
+      }
+    } catch (error) {
+      // Handle payment error
+    }
+  };
+};
+```
+
+## Testing
+
+Stripe provides a set of test card numbers for development:
+
+| Card Number         | Scenario           |
+| ------------------- | ------------------ |
+| 4242 4242 4242 4242 | Successful payment |
+| 4000 0000 0000 9995 | Failed payment     |
+
+Use any future date for expiry, any 3 digits for CVC, and any postal code.
+
+## Monitoring & Debugging
+
+1. View payment activity in your [Stripe Dashboard](https://dashboard.stripe.com/payments)
+2. Monitor logs in Development mode:
+   ```typescript
+   // Logs are automatically enabled in development
+   if (__DEV__) {
+     console.log("Stripe payment result:", result);
+   }
+   ```
+3. Use Stripe's test webhook events to simulate various payment scenarios
+
+## Best Practices
+
+1. **Error Handling**
+
+```typescript
+try {
+  const { error } = await initPaymentSheet({
+    // payment details
+  });
+
+  if (error) {
+    // Handle specific error cases
+    switch (error.code) {
+      case "card_declined":
+        // Handle declined card
+        break;
+      default:
+      // Handle other errors
+    }
+  }
+} catch (error) {
+  // Handle unexpected errors
+}
+```
+
+2. **Payment Confirmation**
+
+```typescript
+// Always verify payment status on your backend
+const verifyPayment = async (paymentIntentId: string) => {
+  const response = await fetch("/api/verify-payment", {
+    method: "POST",
+    body: JSON.stringify({ paymentIntentId }),
+  });
+  return response.json();
+};
+```
+
+## Going Live
+
+Before moving to production:
+
+1. Complete Stripe's verification process
+2. Update environment variables to use live keys
+3. Test thoroughly with real cards
+4. Implement proper error handling
+5. Update your privacy policy and terms of service
+
+<Note>
+  Always test your payment integration thoroughly in development mode before
+  switching to live mode. Never use test API keys in production.
+</Note>
+
+For detailed information about Stripe's features and capabilities, refer to the [official Stripe documentation](https://stripe.com/docs).
