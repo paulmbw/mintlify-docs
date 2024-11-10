@@ -1,0 +1,109 @@
+---
+title: "Crash Reporting & Monitoring"
+description: "Understanding crash reporting and application monitoring in React Native"
+---
+
+## Overview
+
+Crash reporting and application monitoring are essential components of any production-ready mobile application. They help you maintain app stability, improve user experience, and quickly resolve issues before they impact your users.
+
+## Why It's Important
+
+### 1. Proactive Issue Detection
+- Identify crashes and errors in real-time
+- Spot performance bottlenecks before users complain
+- Monitor app stability across different devices and OS versions
+
+### 2. Enhanced User Experience
+- Reduce crash rates and app freezes
+- Improve app performance
+- Maintain high app store ratings
+
+### 3. Efficient Development
+- Get detailed stack traces and error contexts
+- Reproduce issues with session replay
+- Track release adoption and stability
+
+### 4. Business Impact
+- Minimize user churn due to technical issues
+- Reduce time to resolution for critical bugs
+- Make data-driven decisions for app improvements
+
+## Available Providers in Launchtoday
+
+Launchtoday comes pre-configured with three industry-leading monitoring solutions:
+
+### 1. Sentry
+- Specialized in error tracking and crash reporting
+- Detailed stack traces and breadcrumbs
+- Performance monitoring
+- Release health tracking
+
+### 2. Highlight.io
+- Focus on session replay capabilities
+- Visual bug reproduction
+- Network request monitoring
+- Console log tracking
+- Error monitoring
+
+### 3. Datadog
+- Comprehensive APM solution
+- Real User Monitoring (RUM)
+- Advanced analytics and dashboards
+- Custom metric tracking
+- Log management
+
+## Choosing the Right Provider
+
+Each provider has its strengths:
+
+| Provider | Best For | Key Features |
+|----------|----------|--------------|
+| Sentry | Error Tracking | Stack traces, Release tracking, Performance monitoring |
+| Highlight.io | Visual Debugging | Session replay, Network monitoring, Error tracking |
+| Datadog | Enterprise Monitoring | APM, RUM, Custom metrics, Advanced analytics |
+
+## Getting Started
+
+1. Choose your preferred monitoring provider
+2. Follow the provider-specific setup guide:
+   - [Sentry Setup Guide](/react-native-cli/monitoring/sentry)
+   - [Highlight.io Setup Guide](/react-native-cli/monitoring/highlight)
+   - [Datadog Setup Guide](/react-native-cli/monitoring/datadog)
+3. Configure environment variables
+4. Test error reporting in development
+
+<Note>
+  While you can use multiple monitoring solutions simultaneously, we recommend
+  starting with one provider to avoid complexity and potential performance
+  impacts.
+</Note>
+
+## Best Practices
+
+1. **Error Handling**
+   - Implement global error boundaries
+   - Track both handled and unhandled exceptions
+   - Add user context when possible
+
+2. **Performance**
+   - Monitor key user interactions
+   - Track API response times
+   - Set up performance baselines
+
+3. **Privacy**
+   - Configure data scrubbing rules
+   - Mask sensitive information
+   - Follow data protection regulations
+
+4. **Alerts**
+   - Set up error rate thresholds
+   - Configure performance alerts
+   - Establish notification channels
+
+## Support
+
+If you need help setting up or choosing between monitoring solutions, our support team is available:
+- Join our [Discord community](https://discord.gg/sFcdkzY2HZ)
+- Email us at support@launchtoday.dev
+- Create a GitHub issue for technical problems 
