@@ -56,6 +56,10 @@
       ]
     },
     {
+      "group": "Backend API",
+      "pages": ["setup", "endpoints"]
+    },
+    {
       "group": "React Navigation in Launchtoday",
       "pages": [
         "react-native-cli/navigation/introduction",
@@ -74,15 +78,10 @@
         "react-native-cli/supabase/edge-functions"
       ]
     },
-    {
-      "group": "Backend API",
-      "pages": ["setup", "endpoints"]
-    },
+
     {
       "group": "Stripe",
-      "pages": [
-        "react-native-cli/stripe"
-      ]
+      "pages": ["react-native-cli/stripe"]
     },
     {
       "group": "RevenueCat",

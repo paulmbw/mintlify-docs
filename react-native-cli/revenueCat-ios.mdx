@@ -1,30 +1,145 @@
 ---
-title: 'RevenueCat Integration for iOS'
-description: 'Manage in-app purchases and subscriptions on iOS'
+title: "RevenueCat Integration for iOS"
+description: "Manage in-app purchases and subscriptions on iOS"
 ---
+
+RevenueCat simplifies in-app purchase and subscription management for iOS applications. Whether you're implementing one-time purchases like premium features or recurring subscriptions for content access, RevenueCat handles the complexity of iOS monetization. Launchtoday comes with RevenueCat pre-integrated, making it easy to start monetizing your app. This guide will walk you through setting up both in-app purchases and subscriptions specifically for your iOS app.
 
 ## Overview
 
-RevenueCat provides:
+RevenueCat provides several key features:
+
 - In-app purchase management
-- Subscription analytics
+- Subscription analytics and tracking
 - Cross-platform receipt validation
+- Customer support tools
+- Real-time subscription status updates
 
-## Configuration for iOS
+This guide covers two main types of monetization:
+1. **In-app Purchases**: One-time purchases for features or content
+2. **Subscriptions**: Recurring revenue through time-based access to content or features
 
-### 1. RevenueCat Setup
+## In-App Purchases
 
-1. Create account at [revenuecat.com](https://www.revenuecat.com)
-2. Create a new app
-3. Configure products and subscriptions
+In-app purchases (IAPs) are one-time purchases that unlock specific features or content in your app. There are two main types:
 
-### 2. SDK Integration for iOS
+- **Consumable**: Can be purchased multiple times (e.g., virtual currency, game items)
+- **Non-consumable**: Purchased once and permanently unlock features (e.g., premium features, ad removal)
 
-```typescript
-import Purchases from 'react-native-purchases';
+### Setting up In-App Purchases
 
-Purchases.configure({
-  apiKey: 'your_ios_api_key',
-  appUserID: 'user_id' // Optional
-});
-``` 
+This guide only covers creating consumable items, however the process for non-consumable items is identical.
+
+1. In App Store Connect:
+
+   ```plaintext
+   1. Navigate to Your App > Features > In-App Purchases
+   2. Click (+) to add a new In-App Purchase
+   3. Select "Consumable" or "Non-Consumable"
+   4. Configure:
+      - Reference Name (internal use)
+      - Product ID (e.g., com.yourapp.premium)
+      - Price
+      - Display Name
+      - Description
+   5. Add localization if needed
+   6. Submit for review
+   ```
+
+2. In RevenueCat Dashboard:
+   ```plaintext
+   1. Go to "Products"
+   2. Add New Product
+   3. Select "In-App Purchase"
+   4. Enter the same Product ID used in App Store Connect
+   5. Configure display properties
+   ```
+
+## Subscriptions
+
+Subscriptions are recurring revenue products that give users access to content or features for a specific duration. Types include:
+
+- **Auto-renewable**: Automatically renews until cancelled
+- **Non-renewing**: Fixed duration without automatic renewal
+
+### Setting up Subscriptions
+
+1. In App Store Connect:
+
+   ```plaintext
+   1. Navigate to Your App > Features > In-App Purchases
+   2. Click (+) to add a new In-App Purchase
+   3. Select "Auto-Renewable Subscription"
+   4. Configure:
+      - Subscription Group
+      - Reference Name
+      - Product ID (e.g., com.yourapp.pro.monthly)
+      - Subscription Duration
+      - Price
+      - Display Name
+      - Description
+   5. Set up:
+      - Subscription Duration
+      - Free Trial (optional)
+      - Billing Grace Period
+      - Price Points
+   6. Add localization
+   7. Submit for review
+   ```
+
+2. In RevenueCat Dashboard:
+   ```plaintext
+   1. Go to "Products"
+   2. Add New Product
+   3. Select "Subscription"
+   4. Enter the same Product ID used in App Store Connect
+   5. Configure:
+      - Display Properties
+      - Subscription Period
+      - Trial Period (if applicable)
+   ```
+
+### Subscription Groups
+
+Subscription groups help organize related subscriptions (e.g., monthly/yearly plans):
+
+```plaintext
+Example Structure:
+- Pro Subscription Group
+  ├─ Monthly Plan (com.yourapp.pro.monthly)
+  ├─ Quarterly Plan (com.yourapp.pro.quarterly)
+  └─ Annual Plan (com.yourapp.pro.yearly)
+```
+
+<Note>
+  Users can only have one active subscription within a subscription group. This
+  prevents users from purchasing multiple tiers of the same feature set.
+</Note>
+
+## Testing Purchases
+
+1. Create Sandbox Testers:
+
+   ```plaintext
+   1. App Store Connect > Users and Access > Sandbox
+   2. Add Sandbox Tester
+   3. Use this account on your test device
+   ```
+
+2. Test Purchase Flow:
+   ```typescript
+   // Example purchase flow
+   try {
+     const offerings = await Purchases.getOfferings();
+     if (offerings.current !== null) {
+       const purchase = await Purchases.purchasePackage(
+         offerings.current.monthly
+       );
+       // Handle successful purchase
+     }
+   } catch (e) {
+     // Handle error
+   }
+   ```
+
+For more details on implementing the purchase flow in your app, refer to our [Purchase Implementation Guide](/react-native-cli/revenueCat/purchase-flow).
