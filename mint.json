@@ -92,6 +92,15 @@
       ]
     },
     {
+      "group": "Crash Reporting & Monitoring",
+      "pages": [
+        "react-native-cli/monitoring/introduction",
+        "react-native-cli/monitoring/sentry",
+        "react-native-cli/monitoring/highlight",
+        "react-native-cli/monitoring/datadog"
+      ]
+    },
+    {
       "group": "Fastlane",
       "pages": ["setup"]
     },

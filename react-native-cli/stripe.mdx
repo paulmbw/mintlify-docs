@@ -25,12 +25,12 @@ Before beginning the setup, ensure you have:
 
 ### 1. Environment Configuration
 
-Launchtoday already includes the Stripe integration code. To activate it, you only need to add your Stripe credentials to your environment variables:
+Launchtoday already includes the Stripe integration code. To activate it, add your Publishable Key and Secret Key to your `.env` file (ignore the `STRIPE_MERCHANT_IDENTIFIER` - this is covered later in the guide):
 
 ```bash:.env
+# Stripe
 STRIPE_PUBLISHABLE_KEY=pk_test_your_publishable_key
 STRIPE_SECRET_KEY=sk_test_your_secret_key
-STRIPE_MERCHANT_IDENTIFIER=merchant.com.yourapp # Required for Apple Pay
 ```
 
 ### 2. Stripe Provider
@@ -47,6 +47,7 @@ The provider is already integrated into Launchtoday's root component [here](http
 Once you've added your Stripe credentials to your environment variables, you're ready to start processing payments. Here is what the payment sheet from Stripe looks like on iOS and Android:
 
 **iOS:**
+
 <img
   src="/images/stripe-ios.png"
   alt="Stripe iOS"
@@ -57,6 +58,7 @@ Once you've added your Stripe credentials to your environment variables, you're 
 />
 
 **Android:**
+
 <img
   src="/images/stripe-android.png"
   alt="Stripe Android"
@@ -66,128 +68,100 @@ Once you've added your Stripe credentials to your environment variables, you're 
   }}
 />
 
-### 3. Digital Wallet Setup
+## Apple Pay and Google Pay Support
 
-#### Apple Pay Configuration
+Launchtoday comes with built-in support for both Apple Pay and Google Pay, requiring minimal setup to get started. These platform-specific payment methods are automatically detected and enabled when available on the user's device, providing a seamless checkout experience.
 
-1. Register for an Apple Merchant ID in your [Apple Developer Account](https://developer.apple.com)
-2. Add the merchant identifier to your environment variables
-3. In your Stripe Dashboard:
-   - Navigate to Settings > Payment Methods
-   - Enable Apple Pay
-   - Complete domain verification if needed
+### Apple Pay
 
-#### Google Pay Configuration
+To set up Apple Pay in your application, including registering for an Apple Merchant ID and creating the necessary certificates, follow the official Stripe guide [here](https://docs.stripe.com/apple-pay?platform=react-native&locale=en-GB#accept).
 
-1. In your Stripe Dashboard:
-   - Navigate to Settings > Payment Methods
-   - Enable Google Pay
-2. No additional code changes required - the integration is already handled
+As part part of the Apple Pay setup, you should have been prompted to create a `merchant.com.{{YOUR_APP_NAME}}` identifier. In your `.env` file, add this identifier to the `STRIPE_MERCHANT_IDENTIFIER` variable as shown in the example below:
 
-## Using the Integration
+```bash:.env
 
-### Payment Sheet Implementation
-
-The Payment Sheet component is pre-configured in your application. To process a payment:
-
-```typescript
-import { useStripe } from "@/hooks/useStripe";
-
-const PaymentScreen = () => {
-  const { initPayment } = useStripe();
-
-  const handlePayment = async () => {
-    try {
-      const result = await initPayment({
-        amount: 1000, // Amount in cents
-        currency: "usd",
-        description: "Product purchase",
-      });
-
-      if (result.success) {
-        // Handle successful payment
-      }
-    } catch (error) {
-      // Handle payment error
-    }
-  };
-};
+# Stripe
+STRIPE_PUBLISHABLE_KEY=pk_test_your_publishable_key
+STRIPE_SECRET_KEY=sk_test_your_secret_key
+STRIPE_MERCHANT_IDENTIFIER=merchant.com.{{YOUR_APP_NAME}} <-- Update this line with your merchant identifier
 ```
 
-## Testing
+Below is an example of what the Apple Pay payment component looks like and how it works:
 
-Stripe provides a set of test card numbers for development:
+```jsx
+import { PlatformPay } from "@stripe/stripe-react-native";
+
+<PlatformPayButton
+  style={styles.platformPayButton}
+  type={PlatformPay.ButtonType.Pay}
+  onPress={handlePlatformPayment}
+  appearance={PlatformPay.ButtonStyle.Black}
+  disabled={!Number(enteredAmount) || isPlatformLoading || isLoading}
+/>;
+```
+
+You can find the rest of the implementation [here](https://github.com/launchtodayhq/launchtoday-rncli/blob/main/src/screens/Payments/Stripe.tsx).
+
+### Google Pay Support
+
+Google Pay is already configured in Launchtoday and requires no additional setup. For detailed information about Google Pay integration and testing, refer to the official Stripe guide [here](https://docs.stripe.com/google-pay).
+
+Below is an example of what the Google Pay payment component looks like and how it works:
+
+```jsx
+import { PlatformPay } from "@stripe/stripe-react-native";
+
+<PlatformPayButton
+  style={styles.platformPayButton}
+  type={PlatformPay.ButtonType.Pay}
+  onPress={handlePlatformPayment}
+  appearance={PlatformPay.ButtonStyle.Black}
+  disabled={!Number(enteredAmount) || isPlatformLoading || isLoading}
+/>;
+```
+
+You can find the rest of the implementation [here](https://github.com/launchtodayhq/launchtoday-rncli/blob/main/src/screens/Payments/Stripe.tsx).
+
+## Testing Your Integration
+
+During development, Stripe provides a comprehensive set of test card numbers to simulate different payment scenarios. The most commonly used test cards are:
 
 | Card Number         | Scenario           |
 | ------------------- | ------------------ |
 | 4242 4242 4242 4242 | Successful payment |
 | 4000 0000 0000 9995 | Failed payment     |
 
-Use any future date for expiry, any 3 digits for CVC, and any postal code.
+When using these test cards, you can enter any future expiry date, any three-digit CVC, and any postal code. This allows you to thoroughly test your payment integration without processing real transactions.
 
-## Monitoring & Debugging
+## Monitoring & Debugging Your Integration
 
-1. View payment activity in your [Stripe Dashboard](https://dashboard.stripe.com/payments)
-2. Monitor logs in Development mode:
-   ```typescript
-   // Logs are automatically enabled in development
-   if (__DEV__) {
-     console.log("Stripe payment result:", result);
-   }
-   ```
-3. Use Stripe's test webhook events to simulate various payment scenarios
+Monitoring your Stripe integration is crucial for maintaining a healthy payment system. The Stripe Dashboard provides a comprehensive view of all payment activity, including successful transactions, failed attempts, and detailed error messages. You can access this information at any time through your [Stripe Dashboard](https://dashboard.stripe.com/payments).
 
-## Best Practices
-
-1. **Error Handling**
+During development, Launchtoday automatically enables detailed logging for Stripe-related activities. These logs can be particularly helpful when troubleshooting integration issues:
 
 ```typescript
-try {
-  const { error } = await initPaymentSheet({
-    // payment details
-  });
-
-  if (error) {
-    // Handle specific error cases
-    switch (error.code) {
-      case "card_declined":
-        // Handle declined card
-        break;
-      default:
-      // Handle other errors
-    }
-  }
-} catch (error) {
-  // Handle unexpected errors
+// Logs are automatically enabled in development
+if (__DEV__) {
+  console.log("Stripe payment result:", result);
 }
 ```
 
-2. **Payment Confirmation**
+Additionally, Stripe provides test webhook events that you can use to simulate various payment scenarios. This feature is invaluable for testing your application's response to different payment outcomes without processing actual transactions.
 
-```typescript
-// Always verify payment status on your backend
-const verifyPayment = async (paymentIntentId: string) => {
-  const response = await fetch("/api/verify-payment", {
-    method: "POST",
-    body: JSON.stringify({ paymentIntentId }),
-  });
-  return response.json();
-};
-```
+## Preparing for Production
 
-## Going Live
+Before launching your application with live payments, there are several important steps you need to complete to ensure a smooth transition to production:
 
-Before moving to production:
-
-1. Complete Stripe's verification process
-2. Update environment variables to use live keys
-3. Test thoroughly with real cards
-4. Implement proper error handling
-5. Update your privacy policy and terms of service
+1. Complete Stripe's verification process - this is required for processing real payments and helps prevent fraud
+2. Replace your test environment variables with live API keys
+3. Conduct thorough testing with real cards in a staging environment
+4. Implement comprehensive error handling for all possible payment scenarios
+5. Update your application's privacy policy and terms of service to reflect your payment processing practices
 
 <Note>
-  Always test your payment integration thoroughly in development mode before
-  switching to live mode. Never use test API keys in production.
+  A critical best practice is to thoroughly test your payment integration in
+  development mode before switching to live mode. Never use test API keys in
+  production, as this can lead to failed payments and security vulnerabilities.
 </Note>
 
-For detailed information about Stripe's features and capabilities, refer to the [official Stripe documentation](https://stripe.com/docs).
+For more detailed information about Stripe's features, capabilities, and best practices, we recommend referring to the [official Stripe documentation](https://stripe.com/docs).
