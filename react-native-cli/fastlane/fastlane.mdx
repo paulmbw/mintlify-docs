@@ -1,0 +1,114 @@
+# Fastlane Configuration Documentation
+
+This document explains the Fastlane configuration file (Fastfile) which automates the iOS and Android app deployment process.
+
+## Global Configuration
+
+### Before All Hook
+```ruby
+before_all do
+  ENV["FASTLANE_ITC_TEAM_ID"] = "126414293"
+  ENV["FASTLANE_ITC_TEAM_NAME"] = "Paul Waweru"
+  ENV["FASTLANE_APP_IDENTIFIER"] = "com.launchtoday"
+  ENV["FASTLANE_USER"] = "paul.waweru58@gmail.com"
+```
+This section sets up global environment variables that Fastlane will use throughout the deployment process. It includes:
+- App Store Connect Team identification
+- Team name
+- App bundle identifier
+- Developer account email
+
+### Environment Management
+The configuration includes environment handling for both CI and local builds:
+- On CI systems: Uses environment variables set by the CI system
+- Local builds: Copies `.env.production` to `.env`
+
+## iOS Platform Configuration
+
+### Build iOS Release Lane
+```ruby
+lane :build_ios_release do
+  increment_build_number(
+    build_number: latest_testflight_build_number + 1,
+    xcodeproj: "ios/Launchtoday.xcodeproj"
+  )
+  
+  build_ios_app(
+    scheme: "Launchtoday",
+    workspace: "ios/Launchtoday.xcworkspace",
+    configuration: "Release",
+    clean: true,
+    export_method: "app-store"
+  )
+end
+```
+This lane:
+1. Automatically increments the build number based on the latest TestFlight version
+2. Builds the iOS app in release configuration
+3. Prepares it for App Store distribution
+
+### Deploy to TestFlight Lane
+```ruby
+lane :deploy_testflight do
+```
+This lane:
+1. Reads API credentials from `AppStoreConnect.json`
+2. Sets up App Store Connect authentication
+3. Triggers the build process
+4. Uploads the build to TestFlight
+
+## Android Platform Configuration
+
+### Build Android Release Lane
+```ruby
+lane :build_android_release do
+```
+This lane:
+1. Increments the version code in the gradle file
+2. Cleans and builds a release bundle (`.aab`)
+3. Signs the bundle using keystore credentials from environment variables:
+   - `ANDROID_KEYSTORE_FILE`
+   - `ANDROID_KEYSTORE_PASSWORD`
+   - `ANDROID_KEY_ALIAS`
+   - `ANDROID_KEY_PASSWORD`
+
+### Deploy to Play Store Lane
+```ruby
+lane :deploy_playstore do
+```
+This lane:
+1. Triggers the Android release build
+2. Uploads the `.aab` file to the Play Store's internal testing track
+
+## Usage
+
+### iOS Deployment
+```bash
+fastlane ios deploy_testflight
+```
+
+### Android Deployment
+```bash
+fastlane android deploy_playstore
+```
+
+## Required Environment Variables
+
+### iOS
+- `FASTLANE_ITC_TEAM_ID`
+- `FASTLANE_ITC_TEAM_NAME`
+- `FASTLANE_APP_IDENTIFIER`
+- `FASTLANE_USER`
+
+### Android
+- `ANDROID_KEYSTORE_FILE`
+- `ANDROID_KEYSTORE_PASSWORD`
+- `ANDROID_KEY_ALIAS`
+- `ANDROID_KEY_PASSWORD`
+
+## Important Notes
+- The configuration supports both CI and local development environments
+- API keys and credentials should be properly secured and not committed to version control
+- iOS builds require App Store Connect API credentials in `AppStoreConnect.json`
+- Android builds require a valid keystore and associated credentials
+- Both platforms use automated version/build number incrementing

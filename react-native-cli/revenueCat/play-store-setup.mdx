@@ -1,80 +1,164 @@
 ---
-title: "Play Store Setup"
+title: "Google Play Console Setup"
 description: "Configure in-app purchases and subscriptions in Google Play Console"
 ---
 
-This guide walks you through setting up in-app purchases and subscriptions in the Google Play Console before integrating them with RevenueCat.
+The Google Play Console is Google's platform for managing Android apps, including app publishing, in-app purchases, and subscriptions. It serves as the central hub where developers configure their app's monetization strategy, manage app versions, and handle the app review process. For RevenueCat integration, we'll specifically focus on using the Google Play Console to set up your in-app purchases and subscriptions.
+
+<Note>
+  Google Play Console is only accessible to registered Google Play Developer
+  accounts. Make sure you have an active account ($25 one-time fee) before
+  proceeding.
+</Note>
 
 ## Prerequisites
 
 Before you begin, ensure you have:
+
 - A Google Play Developer account ($25 one-time fee)
 - Your app created in the Google Play Console
-- Completed account setup and payment profile
+- Completed the app setup in the Google Play Console
+- Accepted the Play Console developer agreement
 
 ## In-App Products Setup
 
 ### Creating In-App Products
 
-1. Navigate to Play Console > Your App > Monetization setup > Products
-2. Click "Create product"
-3. Choose product type:
-   - One-time product
-   - Subscription
+Navigate to the Play Console and select your app. In the left sidebar, find "Monetization setup" and then "Products". Click the "Create product" button to begin setting up a new in-app purchase.
 
-### Product Configuration
+When creating the product, you'll need to choose between:
 
-For each product, configure:
-- Product ID (e.g., premium_upgrade)
-- Name
-- Description
-- Price
-- Local pricing
-- Status (active/inactive)
+- One-time products (consumable or non-consumable items)
+- Subscription products (recurring payments)
+
+For one-time products, follow these configuration steps:
+
+1. **Product ID**: Choose a unique identifier for your product. Following best practices, include the price in the ID (e.g., "premium_upgrade_499" for a $4.99 purchase)
+
+2. **Product Details**: Configure the following:
+
+   - Name: A clear, user-facing title
+   - Description: Detailed explanation of what users get
+   - Price: Base price in your primary currency
+   - Local pricing: Adjust prices for different regions
+
+3. **Status**: Set the product as active or inactive
+
+Below are the key sections you'll need to complete:
+
+1. **Basic Details**:
+
+   - Product ID (e.g., "coins_pack_999")
+   - Product name (displayed to users)
+   - Description of the product
+   - Status (active/inactive)
+
+2. **Pricing**:
+
+   - Set your base price
+   - Configure regional pricing
+   - Optional: Set up pricing templates
+
+3. **Availability**:
+   - Choose which countries can access the product
+   - Set publication status
 
 ## Subscription Setup
 
 ### Creating Subscription Products
 
-1. Go to Play Console > Your App > Monetization setup > Subscriptions
-2. Click "Create subscription"
-3. Configure subscription details:
-   - Base Plan
-   - Pricing
-   - Billing period
-   - Free trial (optional)
-   - Grace period
+To set up subscriptions, navigate to "Monetization setup" > "Subscriptions" in the Play Console. Click "Create subscription" to begin. The subscription setup process is more detailed than one-time products and includes several important components:
+
+1. **Base Plan Configuration**:
+
+   - Product ID (e.g., "sub_monthly_999")
+   - Name and description
+   - Billing period (monthly, annual, etc.)
+   - Price and regional pricing
+   - Free trial options
+   - Grace period settings
+
+2. **Subscription Features**:
+
+   - **Base Plans**: Configure different subscription durations
+   - **Offers**: Set up promotional pricing
+   - **Multi-line Subscriptions**: Create subscription groups
+   - **Grace Period**: Handle payment issues
+   - **Account Hold**: Manage subscription pausing
+
+3. **Advanced Settings**:
    - Resubscribe options
-
-### Subscription Features
-
-- **Base Plans**: Set up different subscription durations
-- **Offers**: Configure promotional pricing
-- **Multi-line Subscriptions**: Create subscription groups
-- **Grace Period**: Handle payment issues
-- **Account Hold**: Manage subscription pausing
+   - Cancellation survey
+   - Proration settings
+   - Tax categories
 
 ## Testing Configuration
 
-1. Setup Test Accounts:
-   - Create internal test accounts
-   - Add license testing accounts
-   - Configure closed testing track
+<Note>
+  **Important:** You MUST create and publish your app to a closed testing track
+  before you can test in-app purchases or subscriptions on physical Android
+  devices. This is a mandatory requirement by Google Play and cannot be skipped.
+</Note>
 
-2. Test Purchase Flow:
-   - Add test accounts to license testing
+To set up a closed testing track:
+
+1. Navigate to Testing > Closed testing in the Play Console
+2. Create a new closed testing release
+3. Upload your app bundle/APK
+4. Add test users via their Gmail addresses
+5. Complete the testing track setup and publish it
+6. Wait for Google Play to approve the testing track (usually a few hours)
+
+Only after your closed testing track is approved can you properly test purchases on physical devices. Skipping this step will result in purchase failures. You can find
+more information [here](https://www.revenuecat.com/docs/test-and-launch/sandbox/google-play-store).
+
+Testing in-app purchases is crucial before launching. The Play Console provides several testing methods:
+
+1. **License Testing**:
+
+   - Go to Setup > License Testing
+   - Add Gmail accounts for testing
+   - Enable license testing responses
+   - Test purchases will not be charged
+
+2. **Internal Testing Track**:
+
+   - Create an internal testing release
+   - Add test users
    - Install app from internal testing track
-   - Verify test purchases work
+   - Verify purchase flow
 
-## License Testing
+3. **Test Purchase Flow**:
+   - Use test accounts to make purchases
+   - Verify purchase states
+   - Test subscription lifecycle
+   - Validate receipt handling
 
-Configure license testing to test purchases without actual charges:
-1. Go to Setup > License Testing
-2. Add Gmail accounts for testing
-3. Enable license testing responses
+## Best Practices
+
+1. **Product IDs**:
+
+   - Use consistent naming conventions
+   - Include price in the identifier
+   - Make IDs descriptive and unique
+
+2. **Testing**:
+
+   - Test all purchase flows thoroughly
+   - Verify cancellation handling
+   - Test subscription renewals
+   - Validate restore purchases
+
+3. **Documentation**:
+   - Keep detailed records of product IDs
+   - Document testing procedures
+   - Maintain pricing history
 
 ## Next Steps
 
 After configuring your products in the Play Console, proceed to:
+
 1. [RevenueCat Dashboard Setup](/react-native-cli/revenueCat-android)
-2. [Android Implementation Guide](/react-native-cli/revenueCat-android) 
+2. [Android Implementation Guide](/react-native-cli/revenueCat-android)
+
+Remember to keep your product IDs handy as you'll need them when setting up your products in RevenueCat.
