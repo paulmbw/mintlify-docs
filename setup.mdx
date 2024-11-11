@@ -1,29 +1,118 @@
 ---
-title: 'Backend API Setup'
-description: 'Configure your backend API connection'
+title: "Backend API Setup"
+description: "Configure your backend API connection"
 ---
 
 ## API Configuration
 
-### Environment Setup
+Launchtoday comes with a backend service that your mobile app will make API requests to. The service provides secure endpoints for payment processing through Stripe, with planned expansion for push notifications and other features.
 
-Create a `.env` file with your API credentials:
+## Prerequisites
+
+Before getting started, you should be familiar with:
+
+- **TypeScript**: The backend services are written in TypeScript
+- **Koa**: Used as the web framework for building backend services
+- **Docker**: Required for containerizing the application
+- **fly.io**: Used for deploying and hosting the backend services
+
+## Repository Setup
+
+First, clone the repository and install dependencies:
 
 ```bash
-API_BASE_URL=https://api.your-service.com
-API_KEY=your_api_key
+# Clone the repository
+git clone https://github.com/launchtodayhq/launchtoday-backend your-app
+
+# Navigate to project directory
+cd your-app
+
+# Set the node version specified in the .nvmrc file
+nvm use
+
+# Install dependencies
+yarn install
 ```
 
-### API Client Setup
+<Info>
+  The project contains a `.nvmrc` file which specifies Node.js version 18.18.2.
+  You can either: - Use this version by running `nvm use` to automatically
+  switch to 18.18.2 - Or modify the `.nvmrc` file to use your preferred Node.js
+  version (must be ≥18.18.2)
+</Info>
 
-```typescript
-import axios from 'axios';
+Make sure you also have Yarn installed on your system before running these commands.
 
-const apiClient = axios.create({
-  baseURL: process.env.API_BASE_URL,
-  headers: {
-    'Authorization': `Bearer ${process.env.API_KEY}`,
-    'Content-Type': 'application/json',
-  }
-});
-``` 
+### Environment Setup
+
+Copy the example environment file to create your `.env` using the following command:
+
+```bash
+cp .env.example .env
+```
+
+Your `.env` file should look like this:
+
+```
+PORT=3000
+HOST=0.0.0.0
+
+# Stripe
+STRIPE_SECRET_KEY=your_stripe_secret_key
+
+# Supabase
+SUPABASE_PROJECT_URL=your_supabase_project_url
+SUPABASE_API_KEY=your_supabase_api_key
+```
+
+Don't worry about the Stripe and Supabase keys for now, we'll get to them later in the [Stripe Setup](/react-native-cli/stripe) and [Supabase Setup](/react-native-cli/supabase/setup) sections.
+
+### Running the API Service
+
+Once you have the repository setup and the environment variables set up, you can start the API service using the following command:
+
+```bash
+yarn dev
+```
+
+Your terminal should output something like this:
+
+```bash
+➜  yarn dev
+yarn run v1.22.19
+$ nodemon
+[nodemon] 3.1.7
+[nodemon] to restart at any time, enter `rs`
+[nodemon] watching path(s): src/**/*
+[nodemon] watching extensions: ts,js
+[nodemon] starting `ts-node ./src/server.ts`
+
+2024-11-11T08:20:40.482Z INFO  Server running on http://0.0.0.0:3000 ✨
+  port: 3000
+  host: 0.0.0.0
+```
+
+You can verify that the API service is running by navigating to `http://0.0.0.0:3000/hello` in your web browser. You should see a JSON response like this:
+
+```json
+{
+  "message": "Hello, world!"
+}
+```
+
+You can also run the following curl command to verify that the API service is running:
+
+```bash
+curl http://0.0.0.0:3000/hello
+```
+
+## Deploying the API Service
+
+As previously mentioned, the API service is deployed to [fly.io](https://fly.io). There are several other alternatives to fly.io, but for now we'll focus on deploying with fly.io. Ensure you have a
+fly.io account and are logged in before proceeding. You can run the following command to deploy the API service:
+
+1. Run `fly auth signup` if you don't have an account
+2. Run `fly auth login` to login to your fly.io account
+3. Run `fly launch` to launch the API service
+
+After making API changes, you can deploy the changes by running `fly deploy`.
