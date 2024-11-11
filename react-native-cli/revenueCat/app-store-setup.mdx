@@ -1,0 +1,77 @@
+---
+title: "App Store Setup"
+description: "Configure in-app purchases and subscriptions in App Store Connect"
+---
+
+App Store Connect is Apple's platform for managing your iOS apps, including app submission, in-app purchases, and subscriptions. It serves as the central hub where developers configure their app's monetization strategy, manage app versions, and handle the app review process. For RevenueCat integration, we'll specifically focus on using App Store Connect to set up your in-app purchases and subscriptions.
+
+<Note>
+  App Store Connect is only accessible to registered Apple Developer Program members. Make sure you have an active membership ($99/year) before proceeding.
+</Note>
+
+## Prerequisites
+
+Before you begin, ensure you have:
+- An Apple Developer account ($99/year)
+- Your app created in App Store Connect
+- A signed agreement for paid applications in App Store Connect
+
+## In-App Purchases Setup
+
+### Creating a New In-App Purchase
+
+1. Navigate to App Store Connect > Your App > Features > In-App Purchases
+2. Click (+) to add a new In-App Purchase
+3. Select the appropriate type:
+   - Consumable
+   - Non-Consumable
+   - Auto-Renewable Subscription
+   - Non-Renewing Subscription
+
+### Configuring Product Details
+
+For each product, you'll need to configure:
+- Reference Name (internal use)
+- Product ID (e.g., com.yourapp.premium)
+- Price
+- Display Name
+- Description
+- Screenshot/Media for review
+
+## Subscription Setup
+
+### Creating a Subscription Group
+
+1. Navigate to App Store Connect > Your App > Features > In-App Purchases
+2. Click (+) and select "Auto-Renewable Subscription"
+3. Create or select a subscription group
+4. Configure subscription details:
+   - Duration (1 week, 1 month, 2 months, 3 months, 6 months, 1 year)
+   - Pricing
+   - Localization
+   - Review information
+
+### Subscription Features
+
+- **Free Trials**: Configure trial periods for new subscribers
+- **Introductory Offers**: Set up promotional pricing
+- **Subscription Levels**: Create multiple tiers within a group
+
+## Testing Configuration
+
+1. Create Sandbox Testers:
+   - Go to Users and Access > Sandbox > Testers
+   - Add new sandbox tester accounts
+   - Use these accounts for testing purchases
+
+2. Test Purchase Flow:
+   - Install your app on a test device
+   - Sign out of your personal Apple ID
+   - Sign in with a sandbox tester account
+   - Attempt test purchases
+
+## Next Steps
+
+After configuring your products in App Store Connect, proceed to:
+1. [RevenueCat Dashboard Setup](/react-native-cli/revenueCat-ios)
+2. [iOS Implementation Guide](/react-native-cli/revenueCat-ios) 

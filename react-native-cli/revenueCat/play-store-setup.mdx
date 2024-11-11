@@ -1,0 +1,80 @@
+---
+title: "Play Store Setup"
+description: "Configure in-app purchases and subscriptions in Google Play Console"
+---
+
+This guide walks you through setting up in-app purchases and subscriptions in the Google Play Console before integrating them with RevenueCat.
+
+## Prerequisites
+
+Before you begin, ensure you have:
+- A Google Play Developer account ($25 one-time fee)
+- Your app created in the Google Play Console
+- Completed account setup and payment profile
+
+## In-App Products Setup
+
+### Creating In-App Products
+
+1. Navigate to Play Console > Your App > Monetization setup > Products
+2. Click "Create product"
+3. Choose product type:
+   - One-time product
+   - Subscription
+
+### Product Configuration
+
+For each product, configure:
+- Product ID (e.g., premium_upgrade)
+- Name
+- Description
+- Price
+- Local pricing
+- Status (active/inactive)
+
+## Subscription Setup
+
+### Creating Subscription Products
+
+1. Go to Play Console > Your App > Monetization setup > Subscriptions
+2. Click "Create subscription"
+3. Configure subscription details:
+   - Base Plan
+   - Pricing
+   - Billing period
+   - Free trial (optional)
+   - Grace period
+   - Resubscribe options
+
+### Subscription Features
+
+- **Base Plans**: Set up different subscription durations
+- **Offers**: Configure promotional pricing
+- **Multi-line Subscriptions**: Create subscription groups
+- **Grace Period**: Handle payment issues
+- **Account Hold**: Manage subscription pausing
+
+## Testing Configuration
+
+1. Setup Test Accounts:
+   - Create internal test accounts
+   - Add license testing accounts
+   - Configure closed testing track
+
+2. Test Purchase Flow:
+   - Add test accounts to license testing
+   - Install app from internal testing track
+   - Verify test purchases work
+
+## License Testing
+
+Configure license testing to test purchases without actual charges:
+1. Go to Setup > License Testing
+2. Add Gmail accounts for testing
+3. Enable license testing responses
+
+## Next Steps
+
+After configuring your products in the Play Console, proceed to:
+1. [RevenueCat Dashboard Setup](/react-native-cli/revenueCat-android)
+2. [Android Implementation Guide](/react-native-cli/revenueCat-android) 
