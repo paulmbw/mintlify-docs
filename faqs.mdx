@@ -1,26 +1,31 @@
 ---
-title: 'Frequently Asked Questions'
-description: 'Common questions and answers about Launchtoday'
+title: "Frequently Asked Questions"
+description: "Common questions and answers about Launchtoday"
 ---
 
 ## General Questions
 
 ### What is Launchtoday?
+
 Launchtoday is a powerful React Native CLI tool designed to accelerate your app development process. It comes pre-configured with essential features that modern apps need, including authentication, database integration, payments, and more.
 
 ### What platforms does Launchtoday support?
+
 Launchtoday supports both iOS and Android platforms, with full feature parity across both operating systems.
 
 ## Setup & Installation
 
 ### What are the system requirements?
+
 - Node.js v18.18.0 or higher
 - macOS, Windows, or Linux operating system
 - Xcode (for iOS development)
 - Android Studio (for Android development)
 
 ### Why am I getting environment variable errors?
+
 Make sure you've copied the `.env.example` file to `.env` and filled in all required variables. Common issues include:
+
 - Missing Supabase credentials
 - Invalid API keys
 - Incomplete configuration
@@ -28,37 +33,45 @@ Make sure you've copied the `.env.example` file to `.env` and filled in all requ
 ## Development
 
 ### How do I update to the latest version?
+
 If you forked the repository (recommended approach):
+
 1. Add the original repo as upstream: `git remote add upstream https://github.com/launchtodayhq/launchtoday-rncli.git`
 2. Fetch updates: `git fetch upstream`
 3. Merge updates: `git merge upstream/main`
 
 ### How do I add custom fonts?
+
 1. Add your font files to the `assets/fonts` directory
 2. Link the fonts using `react-native.config.js`
 3. Run `npx react-native-asset`
 4. Rebuild your app
 
 ### How do I target a specific iOS simulator?
+
 To run your app on a specific iOS simulator:
 
 1. List available simulators:
+
 ```bash
 xcrun simctl list devices
 ```
 
 2. Find your desired device from the list, for example:
+
 ```bash
 iPhone 15 Plus (D7EDC638-041C-4C07-ADB3-FFB558A3C1E4) (Shutdown)
 iPhone 15 Pro Max (CBAD5E32-15B8-47B4-9F6B-66C8E84145CE) (Shutdown)
 ```
 
 3. Boot the specific simulator using its UUID:
+
 ```bash
 xcrun simctl boot CBAD5E32-15B8-47B4-9F6B-66C8E84145CE
 ```
 
 4. Update your `package.json` script to target the specific simulator:
+
 ```json
 {
   "scripts": {
@@ -68,17 +81,20 @@ xcrun simctl boot CBAD5E32-15B8-47B4-9F6B-66C8E84145CE
 ```
 
 5. Run your app using the updated script:
+
 ```bash
 yarn ios:simulator
 ```
 
 <Note>
-Make sure to replace the simulator name with the exact name of your chosen device from the `xcrun simctl list devices` output.
+  Make sure to replace the simulator name with the exact name of your chosen
+  device from the `xcrun simctl list devices` output.
 </Note>
 
 ## Authentication
 
 ### Which authentication methods are supported?
+
 - Email/Password
 - Magic Link (passwordless)
 - Apple Sign-In
@@ -86,28 +102,33 @@ Make sure to replace the simulator name with the exact name of your chosen devic
 - Social auth providers through Supabase
 
 ### How do I customize the authentication flow?
+
 You can customize the authentication flow by modifying the components in `src/screens/auth/`. The authentication logic is handled by Supabase and can be customized in `src/services/auth.ts`.
 
 ## Database & Storage
 
 ### How do I add new database tables?
+
 1. Go to your Supabase dashboard
 2. Open the SQL editor
 3. Write and execute your SQL commands
 4. Update your TypeScript types in `src/types/supabase.ts`
 
 ### Where should I store user files?
+
 User files should be stored in Supabase Storage buckets. The template comes pre-configured with an 'avatars' bucket, but you can create additional buckets for different types of files.
 
 ## Deployment
 
 ### How do I prepare for App Store submission?
+
 1. Update your app's metadata in Xcode
 2. Configure your certificates and provisioning profiles
 3. Build a release version using Fastlane
 4. Submit through App Store Connect
 
 ### How do I prepare for Play Store submission?
+
 1. Update your app's metadata in `android/app/build.gradle`
 2. Configure your keystore for signing
 3. Build a release version using Fastlane
@@ -118,4 +139,5 @@ User files should be stored in Supabase Storage buckets. The template comes pre-
 ### Common Build Errors
 
 #### Metro Bundler Issues
-Clear the Metro bundler cache: 
+
+Clear the Metro bundler cache:

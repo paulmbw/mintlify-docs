@@ -1,17 +1,19 @@
 ---
-title: "App Store Setup"
+title: "App Store Connect Setup"
 description: "Configure in-app purchases and subscriptions in App Store Connect"
 ---
 
 App Store Connect is Apple's platform for managing your iOS apps, including app submission, in-app purchases, and subscriptions. It serves as the central hub where developers configure their app's monetization strategy, manage app versions, and handle the app review process. For RevenueCat integration, we'll specifically focus on using App Store Connect to set up your in-app purchases and subscriptions.
 
 <Note>
-  App Store Connect is only accessible to registered Apple Developer Program members. Make sure you have an active membership ($99/year) before proceeding.
+  App Store Connect is only accessible to registered Apple Developer Program
+  members. Make sure you have an active membership ($99/year) before proceeding.
 </Note>
 
 ## Prerequisites
 
 Before you begin, ensure you have:
+
 - An Apple Developer account ($99/year)
 - Your app created in App Store Connect
 - A signed agreement for paid applications in App Store Connect
@@ -20,58 +22,150 @@ Before you begin, ensure you have:
 
 ### Creating a New In-App Purchase
 
-1. Navigate to App Store Connect > Your App > Features > In-App Purchases
-2. Click (+) to add a new In-App Purchase
-3. Select the appropriate type:
-   - Consumable
-   - Non-Consumable
-   - Auto-Renewable Subscription
-   - Non-Renewing Subscription
+Once in App Store Connect, scroll down to find the "In-App Purchases" section. Click the plus (+) button in the top-right corner to create a new in-app purchase item. You'll be presented with different purchase types - select "Consumable" if you want the item to be purchasable multiple times (like virtual currency or consumable items).
 
-### Configuring Product Details
+When creating the product, choose a clear reference name for internal use. For the product ID, follow the best practice of including the price in the identifier - for example, "item_1_99" for a $1.99 purchase. This makes it easier to identify different price points when viewing products in RevenueCat later.
 
-For each product, you'll need to configure:
-- Reference Name (internal use)
-- Product ID (e.g., com.yourapp.premium)
-- Price
-- Display Name
-- Description
-- Screenshot/Media for review
+Below are screenshots of the process:
 
-## Subscription Setup
+{" "}
 
-### Creating a Subscription Group
+<img
+  src="/images/in-app-purchases/in-app-1.jpg"
+  alt="Supabase Apple Sign-in Configuration"
+  style={{
+    borderRadius: "10px",
+    maxHeight: "450px",
+  }}
+/>
 
-1. Navigate to App Store Connect > Your App > Features > In-App Purchases
-2. Click (+) and select "Auto-Renewable Subscription"
-3. Create or select a subscription group
-4. Configure subscription details:
-   - Duration (1 week, 1 month, 2 months, 3 months, 6 months, 1 year)
-   - Pricing
-   - Localization
-   - Review information
+{" "}
 
-### Subscription Features
+<img
+  src="/images/in-app-purchases/in-app-2.jpg"
+  alt="Supabase Apple Sign-in Configuration"
+  style={{
+    borderRadius: "10px",
+    maxHeight: "450px",
+  }}
+/>
 
-- **Free Trials**: Configure trial periods for new subscribers
-- **Introductory Offers**: Set up promotional pricing
-- **Subscription Levels**: Create multiple tiers within a group
+{" "}
 
-## Testing Configuration
+<img
+  src="/images/in-app-purchases/in-app-3.jpg"
+  alt="Supabase Apple Sign-in Configuration"
+  style={{
+    borderRadius: "10px",
+    maxHeight: "450px",
+  }}
+/>
 
-1. Create Sandbox Testers:
-   - Go to Users and Access > Sandbox > Testers
-   - Add new sandbox tester accounts
-   - Use these accounts for testing purchases
+After creating your in-app purchase, you'll need to complete several important configuration steps:
 
-2. Test Purchase Flow:
-   - Install your app on a test device
-   - Sign out of your personal Apple ID
-   - Sign in with a sandbox tester account
-   - Attempt test purchases
+1. **Availability**: Select which countries or regions your in-app purchase will be available in. You can choose to make your product available globally or restrict it to specific territories based on your business strategy and regulatory requirements.
 
-## Next Steps
+2. **Price Schedule**: Set up your pricing structure, including the base price and any scheduled price changes. You can configure different price points for different regions, and even schedule price changes in advance - useful for planned promotions or gradual price adjustments.
 
-After configuring your products in App Store Connect, proceed to:
-1. [RevenueCat Dashboard Setup](/react-native-cli/revenueCat-ios)
-2. [iOS Implementation Guide](/react-native-cli/revenueCat-ios) 
+3. **App Store Localization**: Set a clear and descriptive display name and description for your in-app purchase that will appear in the App Store:
+
+   - Display Name: Use a concise name that clearly indicates what the user is purchasing (e.g., "Premium Access", "Remove Ads", "100 Coins")
+   - Description: Write a detailed explanation of what the purchase includes and its benefits to the user. Keep it clear and compelling while avoiding excessive marketing language
+   - If targeting multiple regions, provide translations for both the display name and description in the relevant languages to reach a wider audience
+
+4. **Review Information**: Provide essential information that helps App Store reviewers understand and evaluate your in-app purchase. This includes:
+   - Clear description of the product functionality
+   - Instructions for testing the purchase
+   - Demo account credentials (if applicable)
+   - Screenshots showing the purchase in action (see [here](https://developer.apple.com/help/app-store-connect/reference/in-app-purchase-information) and [here](https://developer.apple.com/help/app-store-connect/reference/screenshot-specifications) for more information)
+
+Once you've completed these steps, you should be able to see your in-app purchase in the App Store Connect dashboard:
+
+<img
+  src="/images/in-app-purchases/in-app-4.jpg"
+  alt="In-app purchase in App Store Connect"
+  style={{
+    borderRadius: "10px",
+    maxHeight: "450px",
+  }}
+/>
+
+### Creating a New Subscription
+
+To set up subscriptions in App Store Connect, navigate to the bottom of your app's page and locate the "Subscriptions" section. Click the plus (+) button in the top-right corner to begin creating a new subscription group. You'll need to provide a reference name for your subscription group - for example, "My App Subscriptions" or "Premium Access Plans". This name will be referenced when setting up RevenueCat later.
+
+<img
+  src="/images/in-app-purchases/in-app-5.jpg"
+  alt="Creating a subscription group"
+  style={{
+    borderRadius: "10px",
+    maxHeight: "450px",
+  }}
+/>
+
+<img
+  src="/images/in-app-purchases/in-app-6.jpg"
+  alt="Creating a subscription group"
+  style={{
+    borderRadius: "10px",
+    maxHeight: "450px",
+  }}
+/>
+
+<img
+  src="/images/in-app-purchases/in-app-7.jpg"
+  alt="Creating a subscription group"
+  style={{
+    borderRadius: "10px",
+    maxHeight: "450px",
+  }}
+/>
+
+Within your subscription group, you can create multiple subscription products with different durations or feature sets. When creating each subscription, you'll need to configure the
+Product ID (e.g. "sub_monthly_999") and a Reference Name (Monthly $9.99 would suffice for this example).
+
+Depending on your offering and pricing strategy, create a subscription for each tier you'd like to offer, either monthly or annually. You'll need to configure the following details:
+
+1. **Subscription Duration**: Choose the duration for your subscription. This can be monthly, annual, or custom durations like 3 or 6 months.
+
+2. **Availability**: Configure where your subscription will be available by selecting territories and setting any pre-order periods if desired.
+
+3. **Subscription Prices**: Set up your base price for the primary territory, configure territory-specific pricing, and add any promotional offers or future price changes.
+
+4. **Localization**: Provide customer-facing text including a clear display name (like "Pro Monthly"), description of features, promotional text, preview media, and translations for all targeted regions.
+
+5. **Review Information**: Include test account credentials, any special setup instructions, demo accounts, validation steps, and contact information for the App Review team.
+
+As a result, you should see your subscription in the App Store Connect dashboard:
+
+<img
+  src="/images/in-app-purchases/in-app-8.jpg"
+  alt="Configuring subscription details"
+  style={{
+    borderRadius: "10px",
+    maxHeight: "450px",
+  }}
+/>
+
+If you see a 'Missing Metadata' status for your subscription, you'll need to add localization details for the subscription group. This can be found below the Subscriptions list as shown below:
+
+<img
+  src="/images/in-app-purchases/in-app-9.jpg"
+  alt="Configuring subscription details"
+  style={{
+    borderRadius: "10px",
+    maxHeight: "450px",
+  }}
+/>
+
+<img
+  src="/images/in-app-purchases/in-app-10.jpg"
+  alt="Configuring subscription details"
+  style={{
+    borderRadius: "10px",
+    maxHeight: "450px",
+  }}
+/>
+
+This concludes the setup for in-app purchases and subscriptions in App Store Connect. Next, we'll cover creating in-app purchases and subscriptions in the Google Play Console.
+You can also skip to setting up RevenueCat for your App Store Connect in-app purchases and subscriptions by clicking [here](/react-native-cli/revenueCat-ios).
